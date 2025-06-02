@@ -143,3 +143,26 @@ img {
 .wife-article.current-wife { /* Class to be added by JS if needed for active one */
     display: block;
 }
+
+/* Genealogy Graph Styling */
+#genealogy-graph-container {
+    margin-top: 20px;
+    border: 2px solid #502900; /* Same as h1 color for consistency */
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff; /* White background for the graph area */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+#genealogy-graph {
+    width: 100%;
+    height: 500px; /* Default height, can be adjusted */
+    display: block;
+    background-color: #fefefa; /* A very light cream for the graph background itself */
+}
+
+/* Styling for the completion message header, if needed */
+#quiz-container h2 { /* This targets the "Quiz Complete!" message */
+    margin-bottom: 15px;
+    color: #502900;
+}
