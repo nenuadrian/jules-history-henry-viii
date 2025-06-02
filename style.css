@@ -158,3 +158,60 @@ img {
     margin-bottom: 15px;
     /* color: #502900; */ /* Let theme handle color */
 }
+
+/* D3 Graph Specific Styles */
+
+/* Style for the main SVG container (already has ID #genealogy-graph) */
+#genealogy-graph svg {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Consistent font */
+    border: 1px solid #eee; /* A light border for the SVG itself if needed */
+}
+
+/* Link/Edge Styling */
+.links line { /* Targeting lines created by D3 */
+    stroke-opacity: 0.7;
+    transition: stroke-opacity 0.2s ease-in-out, stroke 0.2s ease-in-out;
+}
+
+.links line:hover {
+    stroke-opacity: 1;
+    stroke: #555; /* Darken on hover */
+}
+
+/* Node Group Styling (the <g> element for circle + text) */
+.nodes g {
+    cursor: pointer;
+}
+
+/* Node Circle Styling */
+.nodes circle {
+    stroke: #fff; /* White border around circles */
+    stroke-width: 1.5px;
+    transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+}
+
+.nodes g:hover circle { /* Hover effect on the group, applied to circle */
+    transform: scale(1.1);
+    /* filter: drop-shadow(0px 0px 3px rgba(0,0,0,0.3)); // A subtle shadow */
+}
+
+/* Node Label Styling */
+.nodes text {
+    font-size: 10px;
+    fill: #333;
+    paint-order: stroke; /* Draw stroke underneath fill for text */
+    stroke: #fff; /* White outline for text readability */
+    stroke-width: 2px;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+    pointer-events: none; /* Text should not capture mouse events from circle */
+    text-anchor: middle; /* Ensure it's middle aligned if not set by attr */
+}
+
+/* Specific type styling (colors are set by attributes, but other things can be here) */
+.nodes g[data-type="king"] text { /* Example if we were to add data-type to node group */
+    font-weight: bold;
+}
+.nodes g[data-type="queen"] text {
+    /* font-style: italic; */
+}
