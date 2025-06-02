@@ -40,7 +40,7 @@ function displayQuiz() {
         currentWife.options.forEach(optionText => {
             const button = document.createElement('button');
             button.textContent = optionText;
-            button.classList.add('quiz-option-btn');
+            button.classList.add('btn', 'btn-outline-primary', 'quiz-option-btn', 'w-100', 'mb-2');
             button.disabled = false; 
             button.addEventListener('click', function() { 
                 handleAnswer(this.textContent); 

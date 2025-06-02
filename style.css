@@ -1,34 +1,34 @@
 /* === Original Body and General Styles (Keep As Is) === */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Nicer default font */
+/* body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     line-height: 1.6;
     margin: 20px;
     background-color: #f4f4f4;
     color: #333;
-}
+} */
 
-h1 {
+/* h1 {
     text-align: center;
-    color: #502900; /* A regal brown */
-}
+    color: #502900;
+} */
 
 h2 {
-    color: #7a3d00; /* A slightly lighter brown */
+    /* color: #7a3d00; */ /* Let theme handle color */
     border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
 }
 
 article {
-    background-color: #fff;
+    background-color: #fff; /* Keep for wife articles if theme doesn't provide card-like bg */
     padding: 15px;
     margin-bottom: 20px;
-    border-radius: 8px; /* Slightly more rounding than original 5px */
+    border-radius: 8px; 
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-p {
+/* p {
     margin-bottom: 10px;
-}
+} */
 
 img {
     max-width: 200px;
@@ -44,66 +44,71 @@ img {
 
 /* === Enhanced Quiz Container Styling === */
 #quiz-container {
-    background-image: linear-gradient(to bottom right, #fdfdfd, #f0f0f0); /* Subtle gradient */
-    border: 1px solid #d8d8d8; /* Softer border */
-    border-radius: 12px; /* More pronounced rounding */
-    padding: 25px; /* Slightly more padding */
+    /* background-image: linear-gradient(to bottom right, #fdfdfd, #f0f0f0); */ /* Remove to use theme's bg */
+    /* border: 1px solid #d8d8d8; */ /* Remove to use theme's panel/card styling if any */
+    border-radius: 12px; 
+    padding: 25px; 
     margin-top: 25px;
     margin-bottom: 35px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* More pronounced shadow */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Keep shadow for depth */
+    background-color: #fff; /* Add a default white background if theme's body bg is too dark */
 }
 
 #quiz-question {
-    font-size: 1.4em; /* Slightly larger */
-    color: #333;
+    font-size: 1.4em; 
+    /* color: #333; */ /* Let theme handle color */
     margin-bottom: 20px;
-    font-weight: 600; /* Bolder question */
+    font-weight: 600; 
 }
 
 #quiz-options {
     display: flex;
     flex-direction: column;
-    gap: 12px; /* Slightly more gap */
+    gap: 10px; /* Reduced gap as w-100 buttons have mb-2 */
     margin-bottom: 20px;
 }
 
 /* === Enhanced Button Styling (General) === */
 .quiz-option-btn, #next-question-btn {
-    border: none;
-    padding: 12px 18px;
-    font-size: 1em;
-    border-radius: 6px; /* Consistent rounding */
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Updated transition */
-    font-weight: 500; /* Medium weight for button text */
-    text-align: center; /* Centered text for buttons */
+    /* border: none; Provided by .btn */
+    /* padding: 12px 18px; Provided by .btn */
+    /* font-size: 1em; Provided by .btn */
+    /* border-radius: 6px; Provided by .btn */
+    /* cursor: pointer; Provided by .btn */
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; 
+    font-weight: 500; 
+    /* text-align: center; Provided by .btn or .w-100 text helpers if needed */
 }
 
 .quiz-option-btn:focus, #next-question-btn:focus {
-    outline: 2px solid #80adda; /* Light blue outline */
+    outline: 2px solid #80adda; /* Keep custom focus if theme's is not distinct enough */
     outline-offset: 2px;
-    box-shadow: 0 0 0 3px rgba(128, 173, 218, 0.5); /* Softer focus shadow */
+    box-shadow: 0 0 0 3px rgba(128, 173, 218, 0.5); 
 }
 
 /* === Enhanced Quiz Option Buttons === */
-.quiz-option-btn {
-    background-color: #5D3A1A; /* Slightly richer brown */
-    color: white;
+.quiz-option-btn { /* Works with .btn .btn-outline-primary .w-100 .mb-2 */
+    background-color: #5D3A1A !important; /* Custom color over theme's outline */
+    color: white !important;
+    border-color: #5D3A1A !important; /* Match border to background for solid look */
 }
 
 .quiz-option-btn:hover:not(:disabled) {
-    background-color: #7a5029; /* Darker hover for option buttons */
+    background-color: #7a5029 !important;
+    border-color: #7a5029 !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-.quiz-option-btn:disabled {
-    background-color: #E0E0E0; /* Lighter disabled background */
-    color: #888888; /* Lighter disabled text */
+/* Bootstrap's .btn-outline-primary:disabled handles this well enough with the theme.
+   If more specific styling is needed, uncomment and adjust.
+.quiz-option-btn:disabled { 
+    background-color: #E0E0E0 !important; 
+    color: #888888 !important;
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
-}
+} */
 
 /* === Enhanced Feedback Message === */
 #quiz-feedback {
@@ -111,58 +116,45 @@ img {
     font-weight: bold;
     margin-bottom: 20px;
     min-height: 1.5em; 
-    padding: 5px; /* Some padding */
-    border-radius: 4px; /* Rounded corners for feedback if it gets a background */
+    padding: 5px; 
+    border-radius: 4px; 
 }
-
-/* Correct/Incorrect specific styles for feedback will be set by JS,
-   but if we want a default background for the feedback area:
-#quiz-feedback.correct { background-color: #e6ffed; border-left: 5px solid green; }
-#quiz-feedback.incorrect { background-color: #ffe6e6; border-left: 5px solid red; }
-   For now, JS handles only text color.
-*/
-
 
 /* === Enhanced Next Question Button === */
-#next-question-btn {
-    background-color: #28a745; /* Green */
-    color: white;
-    font-weight: bold; /* Bolder text */
-}
-
-#next-question-btn:hover {
-    background-color: #218838; /* Darker green */
+/* #next-question-btn is now .btn .btn-success .mt-3 */
+/* Theme's .btn-success will apply. Add overrides if theme's look is not desired. */
+#next-question-btn:hover { /* Keep custom hover effects if desired over theme's .btn-success:hover */
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(40,167,69,0.25); /* Shadow with its color */
+    box-shadow: 0 4px 10px rgba(40,167,69,0.25); /* Example, may need color from theme's success */
 }
 
 /* === Wife Article Styling (Keep As Is or Minor Adjust) === */
 .wife-article {
-    display: none; /* Handled by JS, but good default */
+    display: none; 
 }
-.wife-article.current-wife { /* Class to be added by JS if needed for active one */
+.wife-article.current-wife { 
     display: block;
 }
 
 /* Genealogy Graph Styling */
 #genealogy-graph-container {
     margin-top: 20px;
-    border: 2px solid #502900; /* Same as h1 color for consistency */
+    border: 2px solid var(--bs-primary); /* Use theme's primary color */
     border-radius: 8px;
     padding: 10px;
-    background-color: #fff; /* White background for the graph area */
+    background-color: #fff; 
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 #genealogy-graph {
     width: 100%;
-    height: 500px; /* Default height, can be adjusted */
+    height: 500px; 
     display: block;
-    background-color: #fefefa; /* A very light cream for the graph background itself */
+    background-color: #fefefa; 
 }
 
 /* Styling for the completion message header, if needed */
-#quiz-container h2 { /* This targets the "Quiz Complete!" message */
+#quiz-container h2 { 
     margin-bottom: 15px;
-    color: #502900;
+    /* color: #502900; */ /* Let theme handle color */
 }
