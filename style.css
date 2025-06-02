@@ -1,0 +1,42 @@
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #502900; /* A regal brown */
+}
+
+h2 {
+    color: #7a3d00; /* A slightly lighter brown */
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+article {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+img {
+    max-width: 200px; /* Or a suitable size */
+    height: auto;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-left: auto; /* Basic centering for block display images */
+    margin-right: auto; /* Basic centering for block display images */
+}
