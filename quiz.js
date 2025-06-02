@@ -130,7 +130,7 @@ function renderGenealogyGraph() {
         .then(genealogyDataExternal => {
             try {
                 const cy = cytoscape({
-                    container: graphDisplayContainer, // Use the variable
+                    container: graphDisplayContainer, 
                     elements: genealogyDataExternal, 
 
                     style: [
@@ -179,12 +179,12 @@ function renderGenealogyGraph() {
                     layout: { 
                         name: 'dagre',
                         rankDir: 'TB',    
-                        nodeSep: 50,     // Adjusted from 60
-                        rankSep: 100,    // Adjusted from 120
-                        edgeSep: 10,     // Adjusted from 15
-                        spacingFactor: 1.25, // Adjusted from 1.2
+                        nodeSep: 50,     
+                        rankSep: 100,    
+                        edgeSep: 10,     
+                        spacingFactor: 1.25, 
                         fit: true,        
-                        padding: 20      // Adjusted from 30 (original was 30, then 20 in prompt) - keeping 20
+                        padding: 20      
                     },
                     userZoomingEnabled: true,
                     userPanningEnabled: true,
@@ -201,14 +201,14 @@ function renderGenealogyGraph() {
 
             } catch (error) {
                 console.error("Error rendering genealogy graph with Cytoscape:", error);
-                if (graphDisplayContainer) { // Use the variable
+                if (graphDisplayContainer) { 
                     graphDisplayContainer.innerHTML = '<p style="color:red; text-align:center;">An error occurred while rendering the family tree graph.</p>';
                 }
             }
         })
         .catch(error => {
             console.error('Error loading genealogy data:', error);
-            if (graphDisplayContainer) { // Use the variable
+            if (graphDisplayContainer) { 
                 graphDisplayContainer.innerHTML = '<p style="color:red; text-align:center;">Failed to load data for the family tree. Graph cannot be displayed.</p>';
             }
         });
@@ -216,31 +216,43 @@ function renderGenealogyGraph() {
 
 document.addEventListener('DOMContentLoaded', function() {
     // Register Cytoscape extensions like Dagre
-    if (typeof cytoscape !== 'undefined' && typeof dagre !== 'undefined') {
-        try {
-            cytoscape.use(dagre);
-            console.log("Dagre layout registered successfully via DOMContentLoaded.");
-        } catch (e) {
-            console.error("Error registering Dagre layout via DOMContentLoaded:", e);
+    if (typeof cytoscape !== 'undefined') {
+        let dagreLayout = null;
+        if (typeof dagre !== 'undefined') {
+            dagreLayout = dagre; // Assign global dagre
+            console.log("Dagre layout extension found as global 'dagre'.");
+        } else if (typeof cytoscapeDagre !== 'undefined') {
+            dagreLayout = cytoscapeDagre; // Assign global cytoscapeDagre
+            console.log("Dagre layout extension found as global 'cytoscapeDagre'.");
+        }
+
+        if (dagreLayout) {
+            try {
+                cytoscape.use(dagreLayout);
+                console.log("Dagre layout registered successfully using the found extension object.");
+            } catch (e) {
+                console.error("Error registering Dagre layout with Cytoscape:", e);
+                const quizContainer = document.getElementById('quiz-container');
+                if (quizContainer) {
+                    quizContainer.innerHTML = '<p style="color:red;">Critical error: Failed to initialize graph layout component. Refreshing might help.</p>';
+                }
+                return; // Stop further execution if registration fails
+            }
+        } else {
+            console.error('Dagre layout extension (dagre or cytoscapeDagre) not found globally.');
             const quizContainer = document.getElementById('quiz-container');
             if (quizContainer) {
-                quizContainer.innerHTML = '<p style="color:red;">Critical error: Failed to initialize graph layout component. Please try refreshing.</p>';
+                quizContainer.innerHTML = '<p style="color:red;">Graph layout extension (Dagre) failed to load. Graph functionality will be unavailable. Please try refreshing.</p>';
             }
-            return; // Stop if Dagre registration fails
+            return; // Stop further execution if dagre extension is not found
         }
     } else {
-        console.error('Cytoscape or Dagre extension not loaded by DOMContentLoaded.');
+        console.error('Cytoscape core library not loaded by DOMContentLoaded.');
         const quizContainer = document.getElementById('quiz-container');
-        const graphDiv = document.getElementById('genealogy-graph'); // This div might not exist yet
-        const isGraphAreaActive = graphDiv && graphDiv.innerHTML.trim() !== '';
-
-        if (quizContainer && !isGraphAreaActive) { 
-            let message = '';
-            if (typeof cytoscape === 'undefined') message += 'Main graphing library (Cytoscape) failed to load. ';
-            if (typeof dagre === 'undefined') message += 'Graph layout extension (Dagre) failed to load. ';
-            quizContainer.innerHTML = `<p style="color:red;">${message} Graph functionality will be unavailable. Please try refreshing.</p>`;
-            return; 
+        if (quizContainer) {
+            quizContainer.innerHTML = '<p style="color:red;">Main graphing library (Cytoscape) failed to load. Quiz and graph cannot be displayed. Please try refreshing.</p>';
         }
+        return; // Stop further execution if cytoscape is not found
     }
 
     fetch('quiz_data.json')
