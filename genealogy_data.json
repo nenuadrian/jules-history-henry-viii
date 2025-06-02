@@ -1,0 +1,28 @@
+{
+    "nodes": [
+        { "data": { "id": "henry_viii", "name": "Henry VIII", "type": "king" } },
+        { "data": { "id": "catherine_o_a", "name": "Catherine of Aragon", "type": "queen" } },
+        { "data": { "id": "mary_i", "name": "Mary I", "type": "child" } },
+        { "data": { "id": "anne_b", "name": "Anne Boleyn", "type": "queen" } },
+        { "data": { "id": "elizabeth_i", "name": "Elizabeth I", "type": "child" } },
+        { "data": { "id": "jane_s", "name": "Jane Seymour", "type": "queen" } },
+        { "data": { "id": "edward_vi", "name": "Edward VI", "type": "child" } },
+        { "data": { "id": "anne_o_c", "name": "Anne of Cleves", "type": "queen" } },
+        { "data": { "id": "catherine_h", "name": "Catherine Howard", "type": "queen" } },
+        { "data": { "id": "catherine_p", "name": "Catherine Parr", "type": "queen" } }
+    ],
+    "edges": [
+        { "data": { "id": "m_h8_coa", "source": "henry_viii", "target": "catherine_o_a", "relation": "marriage" } },
+        { "data": { "id": "m_h8_ab", "source": "henry_viii", "target": "anne_b", "relation": "marriage" } },
+        { "data": { "id": "m_h8_js", "source": "henry_viii", "target": "jane_s", "relation": "marriage" } },
+        { "data": { "id": "m_h8_aoc", "source": "henry_viii", "target": "anne_o_c", "relation": "marriage" } },
+        { "data": { "id": "m_h8_ch", "source": "henry_viii", "target": "catherine_h", "relation": "marriage" } },
+        { "data": { "id": "m_h8_cp", "source": "henry_viii", "target": "catherine_p", "relation": "marriage" } },
+        { "data": { "id": "pc_h8_mary_i", "source": "henry_viii", "target": "mary_i", "relation": "parent_child" } },
+        { "data": { "id": "pc_coa_mary_i", "source": "catherine_o_a", "target": "mary_i", "relation": "parent_child" } },
+        { "data": { "id": "pc_h8_elizabeth_i", "source": "henry_viii", "target": "elizabeth_i", "relation": "parent_child" } },
+        { "data": { "id": "pc_ab_elizabeth_i", "source": "anne_b", "target": "elizabeth_i", "relation": "parent_child" } },
+        { "data": { "id": "pc_h8_edward_vi", "source": "henry_viii", "target": "edward_vi", "relation": "parent_child" } },
+        { "data": { "id": "pc_js_edward_vi", "source": "jane_s", "target": "edward_vi", "relation": "parent_child" } }
+    ]
+}

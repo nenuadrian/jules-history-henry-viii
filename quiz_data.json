@@ -1,0 +1,38 @@
+[
+    {
+        "wifeId": "catherine-of-aragon",
+        "question": "What was Catherine of Aragon's country of origin?",
+        "options": ["Spain", "France", "Portugal", "Germany"],
+        "correctAnswer": "Spain"
+    },
+    {
+        "wifeId": "anne-boleyn",
+        "question": "Which future monarch was Anne Boleyn's daughter?",
+        "options": ["Mary I", "Elizabeth I", "Victoria", "Jane Grey"],
+        "correctAnswer": "Elizabeth I"
+    },
+    {
+        "wifeId": "jane-seymour",
+        "question": "What was the name of Jane Seymour's son, Henry VIII's male heir?",
+        "options": ["Arthur", "Henry IX", "Edward VI", "James"],
+        "correctAnswer": "Edward VI"
+    },
+    {
+        "wifeId": "anne-of-cleves",
+        "question": "Why was Henry VIII's marriage to Anne of Cleves annulled?",
+        "options": ["Her political alliances", "Her inability to have children", "Henry found her unattractive", "She was already married"],
+        "correctAnswer": "Henry found her unattractive"
+    },
+    {
+        "wifeId": "catherine-howard",
+        "question": "Catherine Howard was a cousin to which other of Henry VIII's wives?",
+        "options": ["Catherine of Aragon", "Anne Boleyn", "Jane Seymour", "Anne of Cleves"],
+        "correctAnswer": "Anne Boleyn"
+    },
+    {
+        "wifeId": "catherine-parr",
+        "question": "How many times had Catherine Parr been widowed before marrying Henry VIII?",
+        "options": ["Never", "Once", "Twice", "Three times"],
+        "correctAnswer": "Twice"
+    }
+]
