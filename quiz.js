@@ -3,8 +3,6 @@
 let quizData = []; 
 let currentWifeIndex = 0;
 
-// const genealogyData = { ... }; // Original genealogyData removed
-
 function displayQuiz() {
     if (!quizData || quizData.length === 0) {
         console.error("Quiz data not loaded or empty.");
@@ -111,13 +109,36 @@ function loadNextQuestion() {
 }
 
 function renderGenealogyGraph() {
+    // Check for main Cytoscape library
     if (typeof cytoscape === 'undefined') {
         console.error('Cytoscape.js not loaded. Please include it in your HTML.');
-        const graphContainer = document.getElementById('genealogy-graph');
-        if(graphContainer) {
-            graphContainer.innerHTML = '<p style="color:red; text-align:center;">Error: Graphing library (Cytoscape.js) not loaded.</p>';
+        const graphContainer = document.getElementById('genealogy-graph'); // Attempt to get graph-specific div
+        const quizContainer = document.getElementById('quiz-container'); // Fallback
+        const targetDiv = graphContainer || quizContainer;
+        if (targetDiv) {
+            targetDiv.innerHTML = '<p style="color:red; text-align:center;">Error: Graphing library (Cytoscape.js) not loaded.</p>';
         }
         return;
+    }
+
+    // Check for Dagre layout extension
+    if (typeof dagre === 'undefined') {
+        console.error('Dagre layout extension not loaded. Please include cytoscape-dagre.js after cytoscape.js in your HTML.');
+        const graphContainer = document.getElementById('genealogy-graph');
+        const quizContainer = document.getElementById('quiz-container');
+        const targetDiv = graphContainer || quizContainer;
+        if (targetDiv) {
+            targetDiv.innerHTML = '<p style="color:red; text-align:center;">Error: Dagre layout library not loaded.</p>';
+        }
+        return;
+    }
+    
+    // Register Dagre layout with Cytoscape
+    try {
+        cytoscape.use(dagre); // Pass the global dagre object
+    } catch (e) {
+        console.warn("Could not register dagre layout, possibly already registered or invalid:", e);
+        // Continue execution, as it might be benign (e.g., already registered)
     }
 
     fetch('genealogy_data.json')
@@ -131,7 +152,7 @@ function renderGenealogyGraph() {
             try {
                 const cy = cytoscape({
                     container: document.getElementById('genealogy-graph'),
-                    elements: genealogyDataExternal, // Use fetched data
+                    elements: genealogyDataExternal, 
 
                     style: [
                         {
@@ -210,14 +231,10 @@ function renderGenealogyGraph() {
         .catch(error => {
             console.error('Error loading genealogy data:', error);
             const graphDiv = document.getElementById('genealogy-graph');
-            if (graphDiv) { 
-                 graphDiv.innerHTML = '<p style="color:red; text-align:center;">Failed to load genealogy data. Cannot display graph.</p>';
-            } else {
-                // Fallback if the specific div isn't there for some reason
-                const quizContainer = document.getElementById('quiz-container');
-                if (quizContainer) {
-                    quizContainer.innerHTML += '<p style="color:red; text-align:center;">Failed to load genealogy data. Cannot display graph.</p>';
-                }
+            const quizContainer = document.getElementById('quiz-container'); // Fallback
+            const targetDiv = graphDiv || quizContainer;
+            if (targetDiv) { 
+                 targetDiv.innerHTML = '<p style="color:red; text-align:center;">Failed to load genealogy data. Cannot display graph.</p>';
             }
         });
 }
