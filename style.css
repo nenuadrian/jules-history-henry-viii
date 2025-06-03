@@ -1,169 +1,266 @@
 :root {
-    --bs-primary-rgb: 44, 62, 80; /* Deep Desaturated Blue */
-    --bs-primary: rgb(var(--bs-primary-rgb));
-    --bs-secondary-rgb: 176, 141, 87; /* Muted Gold/Brass */
-    --bs-secondary: rgb(var(--bs-secondary-rgb));
+    /* Tudor Palette */
+    --tudor-red-primary-rgb: 138, 3, 3;         /* Crimson */
+    --tudor-red-primary: rgb(var(--tudor-red-primary-rgb));
+    --tudor-gold-accent-rgb: 176, 141, 87;     /* Antique Gold */
+    --tudor-gold-accent: rgb(var(--tudor-gold-accent-rgb));
+    --tudor-dark-green-rgb: 42, 63, 42;       /* Forest Green */
+    --tudor-dark-green: rgb(var(--tudor-dark-green-rgb));
+    --tudor-black-rgb: 26, 26, 26;            /* Softer Black */
+    --tudor-black: rgb(var(--tudor-black-rgb));
+    --tudor-cream-bg-rgb: 245, 245, 220;       /* Cream/Ivory */
+    --tudor-cream-bg: rgb(var(--tudor-cream-bg-rgb));
+    --tudor-parchment-panel-rgb: 234, 224, 200; /* Parchment for panels */
+    --tudor-parchment-panel: rgb(var(--tudor-parchment-panel-rgb));
+    --tudor-text-light-rgb: 245, 245, 220;     /* Cream for text on dark bg */
+    --tudor-text-light: rgb(var(--tudor-text-light-rgb));
 
-    --color-dark-primary: #2c3e50;
-    --color-accent-gold: #b08d57;
-    --color-light-bg: #f8f9fa;
-    --color-text-standard: #34495e;
-    --color-white: #ffffff;
-    --color-light-grey-border: #e0e0e0;
-    --color-light-green-bg: #e6f7e9; /* For success list items */
-    --color-light-red-bg: #f8d7da;   /* For danger list items */
+    /* Bootstrap Variable Overrides (using Tudor colors) */
+    --bs-primary-rgb: var(--tudor-red-primary-rgb);
+    --bs-primary: var(--tudor-red-primary);
+    --bs-secondary-rgb: var(--tudor-gold-accent-rgb);
+    --bs-secondary: var(--tudor-gold-accent);
+    --bs-dark-rgb: var(--tudor-black-rgb);
+    --bs-dark: var(--tudor-black);
+    --bs-light-rgb: var(--tudor-cream-bg-rgb);
+    --bs-light: var(--tudor-cream-bg);
+    --bs-body-color-rgb: var(--tudor-black-rgb);
+    --bs-body-bg-rgb: var(--tudor-cream-bg-rgb);
+    --bs-border-color: #d3c8b3;
+    --bs-link-color-rgb: var(--tudor-red-primary-rgb);
+    --bs-link-hover-color-rgb: var(--tudor-gold-accent-rgb);
 
 
-    --font-primary: 'Montserrat', sans-serif;
-    --font-accent-serif: 'Playfair Display', serif;
+    /* Typography */
+    --font-body: 'EB Garamond', serif;
+    --font-heading: 'Playfair Display', serif;
+    --font-secondary-heading: 'EB Garamond', serif;
 
-    --default-shadow: 0 5px 15px rgba(44, 62, 80, 0.1);
-    --stronger-shadow: 0 8px 25px rgba(44, 62, 80, 0.15);
+    /* UI Elements */
+    --default-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    --stronger-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    --sharp-corners: 0;
+    --subtle-embellishment-border: 1px solid var(--tudor-gold-accent);
 }
 
 body {
-    font-family: var(--font-primary);
-    /* background-color: var(--color-light-bg); */ /* Overridden by gradient */
-    color: var(--color-text-standard);
+    font-family: var(--font-body);
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
     line-height: 1.7;
-    background-image: linear-gradient(to bottom, #e9ecef, #dee2e6); /* Light grey subtle gradient */
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center;
-    margin: 0; /* Ensure no default body margin interferes */
+    margin: 0;
+    background-image: none;
+    background-attachment: scroll;
+    position: relative; /* For pseudo-elements if not fixed directly on html/body for frame */
+    padding: 4px; /* To prevent content from touching the fixed frame */
 }
+
+/* Page Frame */
+html::before, html::after, body::before, body::after {
+    content: "";
+    position: fixed;
+    background: var(--tudor-gold-accent);
+    z-index: 10000; /* Very high */
+}
+html::before { top: 0; left: 0; right: 0; height: 4px; } /* Top bar */
+html::after { bottom: 0; left: 0; right: 0; height: 4px; } /* Bottom bar */
+body::before { top: 4px; bottom: 4px; left: 0; width: 4px; } /* Left bar, adjusted for html bars */
+body::after { top: 4px; bottom: 4px; right: 0; width: 4px; } /* Right bar, adjusted for html bars */
+
 
 /* Sharp corners for common Bootstrap components */
 .btn, .card, .form-control, .navbar, .list-group-item, .alert,
 #quiz-container, #genealogy-graph-container,
 article
 {
-    border-radius: 0 !important;
+    border-radius: var(--sharp-corners) !important;
 }
 
-/* Apply default shadow and border to card-like elements */
+/* Apply default shadow, border, and background to card-like elements */
 .card, #quiz-container, #genealogy-graph-container, article {
-    box-shadow: var(--default-shadow);
-    border: 1px solid var(--color-light-grey-border);
+    box-shadow:
+        0 0 0 1px var(--tudor-gold-accent), /* Creates a "double border" effect */
+        var(--default-shadow);
+    border: 1px solid var(--tudor-gold-accent); /* Gold border */
+    background-color: var(--tudor-parchment-panel);
+    padding: 1.5rem;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(176, 141, 87, 0.05) 10px, rgba(176, 141, 87, 0.05) 20px); /* Subtle diagonal stripe */
 }
-
-/* Ensure Bootstrap uses our primary/secondary for its components */
-.text-primary { color: var(--bs-primary) !important; }
-.bg-primary { background-color: var(--bs-primary) !important; }
-.border-primary { border-color: var(--bs-primary) !important; }
-
-.text-secondary { color: var(--bs-secondary) !important; }
-.bg-secondary { background-color: var(--bs-secondary) !important; }
-.border-secondary { border-color: var(--bs-secondary) !important; }
 
 a {
-    color: var(--bs-primary);
+    color: var(--bs-link-color-rgb);
     text-decoration: none;
 }
 a:hover {
-    color: var(--color-accent-gold);
+    color: var(--bs-link-hover-color-rgb);
     text-decoration: underline;
 }
 
 /* === Global Element Styling === */
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-primary);
-    color: var(--color-dark-primary);
+    font-family: var(--font-secondary-heading);
+    color: var(--tudor-black);
     margin-bottom: 0.75rem;
-}
-
-h1 {
-    font-family: var(--font-accent-serif);
-    font-weight: 700;
-}
-
-h2, h3, h4, h5, h6 {
     font-weight: 600;
 }
 
-/* Default .btn styling */
-.btn {
-    /* border: 1px solid var(--color-dark-primary); -- overridden by specific btn types */
-    padding: 0.5rem 1rem;
-    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 300ms ease-in-out;
+h1, .h1 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--tudor-red-primary);
+    text-align: center;
+    margin-bottom: 1.5rem;
 }
 
-/* .btn-primary styling (general purpose, not quiz options) */
+/* Section Heading Embellishments */
+#quiz-summary-container h3::after,
+.content-section h2::after { /* Assuming .content-section might be added to main content areas */
+    content: "";
+    display: block;
+    width: 100px;
+    height: 2px;
+    background: var(--tudor-gold-accent);
+    margin: 0.5rem auto 1rem;
+}
+/* For About page main h1 or other specific content sections */
+.container > header > h1::after { /* Targets the H1 in tree.html and about.html */
+    content: "";
+    display: block;
+    width: 150px;
+    height: 2px;
+    background: var(--tudor-gold-accent);
+    margin: 0.5rem auto 1.5rem;
+}
+
+
+#quiz-question::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--bs-border-color);
+    margin: 0.75rem 0; /* Left aligned by default */
+}
+
+
+/* Default .btn styling */
+.btn {
+    font-family: var(--font-body);
+    padding: 0.5rem 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-width: 1px;
+    box-shadow: var(--default-shadow);
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 300ms ease-in-out;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--stronger-shadow);
+}
+
+.btn-light {
+    border-color: var(--tudor-gold-accent);
+    color: var(--tudor-black);
+    background-color: var(--bs-light);
+}
+.btn-light:hover {
+    background-color: var(--tudor-parchment-panel);
+    border-color: var(--tudor-gold-accent);
+    color: var(--tudor-black);
+}
+
 .btn-primary {
-    background-color: var(--bs-primary);
-    color: var(--color-white);
-    border-color: var(--bs-primary);
+    color: var(--tudor-text-light);
+}
+.btn-primary:hover {
+    background-color: #6A0202;
+    border-color: #6A0202;
+    color: var(--tudor-text-light);
+    /* border-width: 1px; Ensure hover doesn't remove border if base .btn had it */
+}
+.btn-primary::before {
+    content: "♦";
+    font-size: 0.7em;
+    margin-right: 0.5em;
+    opacity: 0.6;
+}
+
+
+.btn-secondary {
+    color: var(--tudor-black);
+}
+.btn-secondary:hover {
+    background-color: #8C6B3F;
+    border-color: #8C6B3F;
+    color: var(--tudor-black);
+}
+
+.btn-success { /* Used by Next Question Button */
+    background-color: var(--tudor-gold-accent) !important;
+    color: var(--tudor-black) !important; /* Dark text on gold for better contrast */
+    border-color: var(--tudor-gold-accent) !important;
     padding: 0.6rem 1.2rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
     box-shadow: var(--default-shadow);
 }
-
-.btn-primary:hover {
-    background-color: #1f2c3a;
-    border-color: #1f2c3a;
-    transform: translateY(-2px);
-    box-shadow: var(--stronger-shadow);
-}
-
-/* .btn-success styling (used by Next Question Button) */
-.btn-success {
-    background-color: var(--color-accent-gold) !important;
-    color: var(--color-white) !important;
-    border-color: var(--color-accent-gold) !important;
-    padding: 0.6rem 1.2rem; /* Consistent padding */
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600;
-    box-shadow: var(--default-shadow);
-}
-
 .btn-success:hover {
     background-color: #93703c !important;
     border-color: #93703c !important;
-    transform: translateY(-2px);
+    color: var(--tudor-black) !important;
+    transform: translateY(-1px); /* Use consistent btn hover */
     box-shadow: var(--stronger-shadow);
+}
+.btn-success::before {
+    content: "♦";
+    font-size: 0.7em;
+    margin-right: 0.5em;
+    opacity: 0.6;
 }
 
 
 /* Navbar styling */
 .navbar {
-    background-color: var(--color-white) !important;
+    background-color: var(--tudor-parchment-panel) !important;
     box-shadow: var(--default-shadow);
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1.5rem;
+    border-bottom: 2px solid var(--tudor-gold-accent);
 }
 
 .navbar-brand {
-    font-family: var(--font-accent-serif);
-    color: var(--color-dark-primary) !important;
-    font-size: 1.5rem;
+    font-family: var(--font-heading);
+    color: var(--tudor-red-primary) !important;
+    font-size: 1.75rem;
     font-weight: 700;
 }
 
 .navbar .nav-link {
-    color: var(--color-text-standard) !important;
+    font-family: var(--font-secondary-heading);
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 0.5rem 1rem !important;
+    text-transform: none;
+    letter-spacing: 0.2px;
+    color: var(--tudor-black) !important;
+    padding: 0.5rem 0.75rem !important;
     border-bottom: 2px solid transparent;
+    margin: 0 0.25rem;
 }
 
 .navbar .nav-link:hover,
 .navbar .nav-link.active {
-    color: var(--color-accent-gold) !important;
-    border-bottom: 2px solid var(--color-accent-gold);
+    color: var(--tudor-red-primary) !important;
+    border-bottom-color: var(--tudor-red-primary);
 }
 
 h2 {
-    border-bottom: 1px solid var(--color-light-grey-border);
+    border-bottom: 1px solid var(--bs-border-color);
     padding-bottom: 5px;
 }
 
 article {
-    background-color: var(--color-white);
-    padding: 15px;
+    padding: 1.5rem; /* Standardized */
     margin-bottom: 20px;
 }
 
@@ -173,23 +270,22 @@ img {
     display: block;
     margin-top: 10px;
     margin-bottom: 10px;
-    border: 1px solid var(--color-light-grey-border);
+    border: 1px solid var(--bs-border-color);
     margin-left: auto;
     margin-right: auto;
 }
 
-/* === Quiz Container Styling === */
 #quiz-container {
-    padding: 25px;
+    padding: 1.5rem; /* Standardized */
     margin-top: 25px;
     margin-bottom: 35px;
-    background-color: var(--color-white);
 }
 
 #quiz-question {
     font-size: 1.4em;
     margin-bottom: 20px;
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--tudor-black);
 }
 
 #quiz-options {
@@ -199,25 +295,29 @@ img {
     margin-bottom: 20px;
 }
 
-/* === Quiz Option Buttons (Specific) === */
-/* JS adds .btn .btn-outline-primary .quiz-option-btn .w-100 .mb-2 */
 .quiz-option-btn {
     background-color: var(--bs-primary) !important;
-    color: var(--color-white) !important;
+    color: var(--tudor-text-light) !important;
     border-color: var(--bs-primary) !important;
-    font-weight: 500; /* From previous general rule */
-    text-transform: none; /* Override any potential uppercase from .btn-primary if it was used as base */
-    letter-spacing: normal;
-    box-shadow: none; /* Flatter look for options */
+    font-weight: 600; /* Match other action buttons */
+    text-transform: uppercase; /* Match other action buttons */
+    letter-spacing: 0.5px; /* Match other action buttons */
+    box-shadow: var(--default-shadow); /* Add shadow like other action buttons */
 }
 
 .quiz-option-btn:hover:not(:disabled) {
-    background-color: #1f2c3a !important; /* Darker shade of --bs-primary */
-    border-color: #1f2c3a !important;
-    transform: translateY(-2px);
-    box-shadow: var(--default-shadow); /* Add shadow on hover */
+    background-color: #6A0202 !important; /* Darker Tudor Red */
+    border-color: #6A0202 !important;
+    color: var(--tudor-text-light) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--stronger-shadow);
 }
-/* Disabled state: Bootstrap's .btn-outline-primary:disabled should be sufficient with theme. */
+.quiz-option-btn::before { /* Add diamond to quiz options too */
+    content: "♦";
+    font-size: 0.7em;
+    margin-right: 0.5em;
+    opacity: 0.6;
+}
 
 
 #quiz-feedback {
@@ -228,12 +328,10 @@ img {
     padding: 5px;
 }
 
-#next-question-btn { /* Has .btn .btn-success .mt-3 from HTML */
-    font-weight: 600; /* Ensure consistency if not covered by .btn-success override */
+#next-question-btn {
+    font-weight: 600;
 }
-#next-question-btn:hover {
-    /* transform and shadow already defined in .btn-success:hover */
-}
+
 
 .wife-article {
     display: none;
@@ -243,37 +341,37 @@ img {
     display: block;
 }
 
-/* === Genealogy Graph Styling === */
 #genealogy-graph-container {
     margin-top: 20px;
-    padding: 10px;
-    background-color: var(--color-white);
+    padding: 1.5rem; /* Standardized */
 }
 
 #genealogy-graph {
     width: 100%;
     height: 500px;
     display: block;
-    background-color: var(--color-light-bg);
+    background-color: var(--tudor-cream-bg);
 }
 
 #quiz-container h2 {
     margin-bottom: 15px;
+    font-family: var(--font-heading);
+    color: var(--tudor-red-primary);
 }
 
 /* D3 Graph Specific Styles */
 #genealogy-graph svg {
-    font-family: var(--font-primary);
+    font-family: var(--font-body);
 }
 
 .links line {
-    stroke-opacity: 0.7;
+    stroke-opacity: 0.6;
     transition: stroke-opacity 0.2s ease-in-out, stroke 0.2s ease-in-out;
 }
 
 .links line:hover {
     stroke-opacity: 1;
-    stroke: var(--color-text-standard);
+    stroke: var(--tudor-black);
 }
 
 .nodes g {
@@ -281,31 +379,35 @@ img {
 }
 
 .nodes circle {
-    stroke: var(--color-white);
-    stroke-width: 1.5px;
+    stroke: var(--tudor-parchment-panel);
+    stroke-width: 2px;
     transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
 }
 
 .nodes g:hover circle {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    stroke: var(--tudor-gold-accent);
 }
 
 .nodes text {
     font-size: 10px;
-    fill: var(--color-text-standard);
+    fill: var(--tudor-black);
     paint-order: stroke;
-    stroke: var(--color-white);
-    stroke-width: 2px;
+    stroke: var(--tudor-cream-bg);
+    stroke-width: 2.5px;
     stroke-linecap: butt;
     stroke-linejoin: miter;
     pointer-events: none;
     text-anchor: middle;
+    font-weight: 500;
 }
 
 .nodes g[data-type="king"] text {
-    font-weight: bold;
+    font-weight: 700;
 }
-.nodes g[data-type="queen"] text { }
+.nodes g[data-type="queen"] text {
+    font-weight: 600;
+}
 
 /* Quiz Animation Styles */
 .fade-in {
@@ -320,8 +422,6 @@ img {
 
 .visible { }
 
-#quiz-container { }
-
 #next-question-btn.fade-in {
     opacity: 1 !important;
 }
@@ -330,41 +430,70 @@ img {
 #quiz-summary-container {
     margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid var(--color-light-grey-border);
+    border-top: 1px solid var(--bs-border-color);
 }
 
 #quiz-summary-container h3 {
-    color: var(--bs-primary);
+    color: var(--tudor-red-primary);
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+#quiz-summary-container h3::after { /* Apply to summary headers too */
+    content: "";
+    display: block;
+    width: 100px;
+    height: 2px;
+    background: var(--tudor-gold-accent);
+    margin: 0.5rem auto 1rem;
 }
 
-#all-wives-recap .card { } /* Default card styling from global rule applies */
 
-#all-wives-recap .card-title { /* Name of the wife */
-    font-family: var(--font-accent-serif);
-    color: var(--color-dark-primary);
-    font-size: 1.25rem;
+#all-wives-recap .card {
+    /* Handled by global card rule with parchment background */
+ }
+
+#all-wives-recap .card-title {
+    font-family: var(--font-secondary-heading);
+    font-weight: 700;
+    color: var(--tudor-black);
 }
+
+/* Text Embellishments: Drop Cap for Wife Bio in Summary */
+#all-wives-recap .card-text.small::first-letter { /* Target the bio paragraph if it's the first .small one */
+    font-family: var(--font-heading);
+    font-size: 2em;
+    color: var(--tudor-red-primary);
+    float: left;
+    line-height: 0.8;
+    margin-right: 0.05em;
+    margin-bottom: -0.1em; /* Adjust to prevent extra space */
+    font-weight: 700;
+}
+
 
 #quiz-summary-container .list-group-item {
-    background-color: var(--color-white);
-    border: 1px solid var(--color-light-grey-border);
-    margin-bottom: -1px; /* Overlap borders like default Bootstrap */
+    /* background-color, border, radius from global rules */
+    margin-bottom: -1px;
 }
 #quiz-summary-container .list-group-item p {
     margin-bottom: 0.5rem;
 }
 
-#quiz-summary-container .list-group-item strong { }
+#quiz-summary-container .list-group-item strong {
+    font-weight: 600;
+}
 
-#quiz-summary-container .list-group-item .fw-bold { }
+#quiz-summary-container .list-group-item .fw-bold {
+    color: var(--tudor-dark-green);
+}
 
 #quiz-summary-container .list-group-item-success {
-    background-color: var(--color-light-green-bg) !important;
-    color: var(--bs-success-text-emphasis); /* Bootstrap 5 variable */
-    border-color: var(--bs-success-border-subtle); /* Bootstrap 5 variable */
+    background-color: rgba(var(--tudor-dark-green-rgb), 0.1) !important;
+    color: var(--tudor-dark-green) !important;
+    border-color: rgba(var(--tudor-dark-green-rgb), 0.3) !important;
 }
 #quiz-summary-container .list-group-item-danger {
-    background-color: var(--color-light-red-bg) !important;
-    color: var(--bs-danger-text-emphasis); /* Bootstrap 5 variable */
-    border-color: var(--bs-danger-border-subtle); /* Bootstrap 5 variable */
+    background-color: rgba(var(--tudor-red-primary-rgb), 0.08) !important;
+    color: var(--tudor-red-primary) !important;
+    border-color: rgba(var(--tudor-red-primary-rgb), 0.25) !important;
 }
