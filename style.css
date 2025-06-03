@@ -75,7 +75,7 @@ img {
     /* font-size: 1em; Provided by .btn */
     /* border-radius: 6px; Provided by .btn */
     /* cursor: pointer; Provided by .btn */
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; 
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, opacity 300ms ease-in-out; 
     font-weight: 500; 
     /* text-align: center; Provided by .btn or .w-100 text helpers if needed */
 }
@@ -131,10 +131,12 @@ img {
 /* === Wife Article Styling (Keep As Is or Minor Adjust) === */
 .wife-article {
     display: none; 
+    opacity: 0; /* Start transparent for fade-in effect */
 }
-.wife-article.current-wife { 
-    display: block;
+.wife-article.visible { /* JS will add .visible and .fade-in simultaneously after setting display:block */
+    display: block; /* Ensure it's in layout flow */
 }
+
 
 /* Genealogy Graph Styling */
 #genealogy-graph-container {
@@ -214,4 +216,46 @@ img {
 }
 .nodes g[data-type="queen"] text {
     /* font-style: italic; */
+}
+
+/* Quiz Animation Styles */
+.fade-in {
+    opacity: 1 !important; /* Target opacity */
+    transition: opacity 300ms ease-in-out;
+}
+
+.fade-out {
+    opacity: 0 !important; /* Target opacity */
+    transition: opacity 300ms ease-in-out;
+}
+
+/* This class can be used to ensure an element is part of the layout flow 
+   but initially invisible before fade-in, if display:none was used previously.
+   displayQuiz now handles setting opacity to 0 and display to block before fade-in.
+*/
+.visible {
+    /* display: block;  JS sets display:block on wife articles directly */
+    /* Or other appropriate display value like 'flex' if needed */
+}
+
+/* Ensure elements that will be faded start with opacity 0 if they aren't immediately faded in */
+/* The JS now handles setting initial opacity to 0 before adding .fade-in, so this might be redundant
+   but can serve as a fallback if an element is added to DOM and should be hidden before JS acts.
+#quiz-question,
+#quiz-options,
+.wife-article:not(.visible) { /* If not yet marked visible by JS */
+    /* opacity: 0; /* Default to hidden if JS hasn't set them up for fade-in yet */
+/* }
+*/
+
+/* Ensure the quiz container itself doesn't have conflicting transitions if not intended */
+#quiz-container {
+    /* Add if needed: transition: none; */
+}
+
+/* Ensure next question button also fades if desired, though JS manages display:none primarily */
+#next-question-btn.fade-in { /* This class is added by JS in handleAnswer */
+    opacity: 1 !important; 
+    /* display: block !important; /* JS already sets display:block for it */
+    /* transition: opacity 300ms ease-in-out; /* Already on #next-question-btn general rule */
 }
