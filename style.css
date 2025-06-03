@@ -1,6 +1,6 @@
 /* === Original Body and General Styles (Keep As Is) === */
 /* body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     margin: 20px;
     background-color: #f4f4f4;
@@ -22,7 +22,7 @@ article {
     background-color: #fff; /* Keep for wife articles if theme doesn't provide card-like bg */
     padding: 15px;
     margin-bottom: 20px;
-    border-radius: 8px; 
+    border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -46,8 +46,8 @@ img {
 #quiz-container {
     /* background-image: linear-gradient(to bottom right, #fdfdfd, #f0f0f0); */ /* Remove to use theme's bg */
     /* border: 1px solid #d8d8d8; */ /* Remove to use theme's panel/card styling if any */
-    border-radius: 12px; 
-    padding: 25px; 
+    border-radius: 12px;
+    padding: 25px;
     margin-top: 25px;
     margin-bottom: 35px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Keep shadow for depth */
@@ -55,10 +55,10 @@ img {
 }
 
 #quiz-question {
-    font-size: 1.4em; 
+    font-size: 1.4em;
     /* color: #333; */ /* Let theme handle color */
     margin-bottom: 20px;
-    font-weight: 600; 
+    font-weight: 600;
 }
 
 #quiz-options {
@@ -75,15 +75,15 @@ img {
     /* font-size: 1em; Provided by .btn */
     /* border-radius: 6px; Provided by .btn */
     /* cursor: pointer; Provided by .btn */
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, opacity 300ms ease-in-out; 
-    font-weight: 500; 
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, opacity 300ms ease-in-out;
+    font-weight: 500;
     /* text-align: center; Provided by .btn or .w-100 text helpers if needed */
 }
 
 .quiz-option-btn:focus, #next-question-btn:focus {
     outline: 2px solid #80adda; /* Keep custom focus if theme's is not distinct enough */
     outline-offset: 2px;
-    box-shadow: 0 0 0 3px rgba(128, 173, 218, 0.5); 
+    box-shadow: 0 0 0 3px rgba(128, 173, 218, 0.5);
 }
 
 /* === Enhanced Quiz Option Buttons === */
@@ -102,8 +102,8 @@ img {
 
 /* Bootstrap's .btn-outline-primary:disabled handles this well enough with the theme.
    If more specific styling is needed, uncomment and adjust.
-.quiz-option-btn:disabled { 
-    background-color: #E0E0E0 !important; 
+.quiz-option-btn:disabled {
+    background-color: #E0E0E0 !important;
     color: #888888 !important;
     cursor: not-allowed;
     box-shadow: none;
@@ -115,9 +115,9 @@ img {
     font-size: 1.1em;
     font-weight: bold;
     margin-bottom: 20px;
-    min-height: 1.5em; 
-    padding: 5px; 
-    border-radius: 4px; 
+    min-height: 1.5em;
+    padding: 5px;
+    border-radius: 4px;
 }
 
 /* === Enhanced Next Question Button === */
@@ -130,7 +130,7 @@ img {
 
 /* === Wife Article Styling (Keep As Is or Minor Adjust) === */
 .wife-article {
-    display: none; 
+    display: none;
     opacity: 0; /* Start transparent for fade-in effect */
 }
 .wife-article.visible { /* JS will add .visible and .fade-in simultaneously after setting display:block */
@@ -144,19 +144,19 @@ img {
     border: 2px solid var(--bs-primary); /* Use theme's primary color */
     border-radius: 8px;
     padding: 10px;
-    background-color: #fff; 
+    background-color: #fff;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 #genealogy-graph {
     width: 100%;
-    height: 500px; 
+    height: 500px;
     display: block;
-    background-color: #fefefa; 
+    background-color: #fefefa;
 }
 
 /* Styling for the completion message header, if needed */
-#quiz-container h2 { 
+#quiz-container h2 {
     margin-bottom: 15px;
     /* color: #502900; */ /* Let theme handle color */
 }
@@ -229,7 +229,7 @@ img {
     transition: opacity 300ms ease-in-out;
 }
 
-/* This class can be used to ensure an element is part of the layout flow 
+/* This class can be used to ensure an element is part of the layout flow
    but initially invisible before fade-in, if display:none was used previously.
    displayQuiz now handles setting opacity to 0 and display to block before fade-in.
 */
@@ -255,7 +255,7 @@ img {
 
 /* Ensure next question button also fades if desired, though JS manages display:none primarily */
 #next-question-btn.fade-in { /* This class is added by JS in handleAnswer */
-    opacity: 1 !important; 
+    opacity: 1 !important;
     /* display: block !important; /* JS already sets display:block for it */
     /* transition: opacity 300ms ease-in-out; /* Already on #next-question-btn general rule */
 }
