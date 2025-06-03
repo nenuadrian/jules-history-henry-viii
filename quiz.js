@@ -3,6 +3,7 @@
 const quizTransitionDuration = 300; // milliseconds
 let quizData = [];
 let currentWifeIndex = 0;
+let userQuizLog = []; // Initialize log for user's answers
 
 function displayQuiz() {
     const quizQuestionElement = document.getElementById('quiz-question');
@@ -13,29 +14,19 @@ function displayQuiz() {
     const wifeArticles = document.querySelectorAll('.wife-article');
     let previousWifeArticleToFade = null;
 
-    // Identify the currently "active" wife article to fade it out.
-    // An article is active if it's visible or was in the process of fading in.
     wifeArticles.forEach(article => {
-        // Check if article is currently considered visible (either display:block or already fading in)
-        // Check opacity as well, as 'block' might be set before fade-in starts.
-        const style = window.getComputedStyle(article); // Get computed style
+        const style = window.getComputedStyle(article);
         if (style.display === 'block' && (style.opacity === '1' || article.classList.contains('fade-in'))) {
             previousWifeArticleToFade = article;
         }
     });
 
-    // If no specific article was "active" but question content exists, consider it not the first display.
-    // This handles cases where an article might have been hidden by other means.
     const isQuestionAreaPopulated = quizQuestionElement && quizQuestionElement.textContent !== "Question will appear here." && quizQuestionElement.textContent !== "";
 
-
-    // Elements to fade out: question, options, and the previously active wife article.
-    const elementsToFadeOut = [quizQuestionElement, quizOptionsElement, previousWifeArticleToFade].filter(el => el); // Filter out nulls
-
+    const elementsToFadeOut = [quizQuestionElement, quizOptionsElement, previousWifeArticleToFade].filter(el => el);
 
     const setupAndFadeInNewContent = () => {
         if (!quizData || currentWifeIndex >= quizData.length) {
-             // This case should be fully handled by loadNextQuestion, which leads to graph rendering.
             console.log("Quiz data exhausted or not loaded; proceeding to completion/graph.");
             return;
         }
@@ -43,14 +34,12 @@ function displayQuiz() {
         const currentWifeData = quizData[currentWifeIndex];
         const newWifeArticle = document.getElementById(currentWifeData.wifeId);
 
-        // 1. Prepare all wife articles: hide all, remove animation classes.
         wifeArticles.forEach(article => {
             article.style.display = 'none';
             article.classList.remove('fade-in', 'fade-out', 'visible');
             article.style.opacity = '';
         });
 
-        // 2. Prepare and fade in the new wife article
         if (newWifeArticle) {
             newWifeArticle.classList.remove('fade-out');
             newWifeArticle.style.opacity = '0';
@@ -60,7 +49,6 @@ function displayQuiz() {
             newWifeArticle.classList.add('fade-in');
         }
 
-        // 3. Prepare and fade in the question
         if (quizQuestionElement) {
             quizQuestionElement.textContent = currentWifeData.question;
             quizQuestionElement.classList.remove('fade-out');
@@ -69,14 +57,13 @@ function displayQuiz() {
             quizQuestionElement.classList.add('fade-in');
         }
 
-        // 4. Prepare and fade in the options
         if (quizOptionsElement) {
             quizOptionsElement.innerHTML = '';
             currentWifeData.options.forEach(optionText => {
                 const button = document.createElement('button');
                 button.classList.add('btn', 'btn-outline-primary', 'quiz-option-btn', 'w-100', 'mb-2');
                 button.textContent = optionText;
-                button.disabled = false; // Ensure buttons are re-enabled
+                button.disabled = false;
                 button.addEventListener('click', function() { handleAnswer(this.textContent); });
                 quizOptionsElement.appendChild(button);
             });
@@ -86,7 +73,6 @@ function displayQuiz() {
             quizOptionsElement.classList.add('fade-in');
         }
 
-        // 5. Reset feedback and next button
         if (quizFeedbackElement) {
             quizFeedbackElement.textContent = '';
             quizFeedbackElement.style.opacity = '1';
@@ -95,11 +81,10 @@ function displayQuiz() {
         if (nextQuestionButton) {
             nextQuestionButton.style.display = 'none';
             nextQuestionButton.classList.remove('fade-in');
-            nextQuestionButton.disabled = false; // Ensure re-enabled
+            nextQuestionButton.disabled = false;
         }
     };
 
-    // Determine if this is the first question (nothing to fade out)
     const isFirstDisplay = !isQuestionAreaPopulated && !previousWifeArticleToFade;
 
     if (isFirstDisplay) {
@@ -122,7 +107,7 @@ function handleAnswer(selectedOptionText) {
         console.error("handleAnswer called but quizData is not loaded.");
         return;
     }
-    const currentWife = quizData[currentWifeIndex];
+    const currentWifeData = quizData[currentWifeIndex];
     const quizFeedbackElement = document.getElementById('quiz-feedback');
     const nextQuestionButton = document.getElementById('next-question-btn');
 
@@ -136,22 +121,28 @@ function handleAnswer(selectedOptionText) {
         button.disabled = true;
     });
 
-    if (selectedOptionText === currentWife.correctAnswer) {
+    const isCorrect = selectedOptionText === currentWifeData.correctAnswer;
+
+    userQuizLog.push({
+        question: currentWifeData.question,
+        userAnswer: selectedOptionText,
+        correctAnswer: currentWifeData.correctAnswer,
+        isCorrect: isCorrect,
+        wifeId: currentWifeData.wifeId
+    });
+
+    if (isCorrect) {
         quizFeedbackElement.textContent = "Correct!";
         quizFeedbackElement.style.color = "green";
-        nextQuestionButton.style.display = "block";
-        nextQuestionButton.style.opacity = '0';
-        void nextQuestionButton.offsetWidth;
-        nextQuestionButton.classList.add('fade-in');
-
     } else {
         quizFeedbackElement.textContent = "Incorrect. Try the next question when ready, or study this wife's info!";
         quizFeedbackElement.style.color = "red";
-        nextQuestionButton.style.display = "block";
-        nextQuestionButton.style.opacity = '0';
-        void nextQuestionButton.offsetWidth;
-        nextQuestionButton.classList.add('fade-in');
     }
+
+    nextQuestionButton.style.display = "block";
+    nextQuestionButton.style.opacity = '0';
+    void nextQuestionButton.offsetWidth;
+    nextQuestionButton.classList.add('fade-in');
 }
 
 function loadNextQuestion() {
@@ -190,8 +181,13 @@ function loadNextQuestion() {
 
         setTimeout(() => {
             if (quizContainer) {
-                quizContainer.innerHTML = '<h2>Quiz Complete! View the Tudor Family Tree:</h2><div id="genealogy-graph-container"><div id="genealogy-graph"></div></div>';
+                quizContainer.innerHTML = '<h2>Quiz Complete! View the Tudor Family Tree & Summary:</h2>' +
+                                          '<div id="genealogy-graph-container"><div id="genealogy-graph"></div></div>' +
+                                          '<div id="quiz-summary-container"></div>';
+
                 renderD3GenealogyGraph();
+
+                displayQuizSummary(userQuizLog);
             }
             document.querySelectorAll('.wife-article').forEach(article => {
                 article.style.display = 'none';
@@ -331,6 +327,102 @@ async function renderD3GenealogyGraph() {
         if (graphDisplayContainer) {
             graphDisplayContainer.innerHTML = '<p style="color:red; text-align:center;">An error occurred while rendering the family tree graph with D3.</p>';
         }
+    }
+}
+
+function displayQuizSummary(log) {
+    const summaryContainer = document.getElementById('quiz-summary-container');
+    if (!summaryContainer) {
+        console.error('Quiz summary container not found.');
+        return;
+    }
+    summaryContainer.innerHTML = ''; // Clear any previous content
+
+    // --- 1. Display All Wives' Information (Reconstruction from quizData) ---
+    const wivesHeader = document.createElement('h3');
+    wivesHeader.className = 'mt-4 mb-3 text-center';
+    wivesHeader.textContent = "The Six Wives: A Recap";
+    summaryContainer.appendChild(wivesHeader);
+
+    const allWivesArticlesContainer = document.createElement('div');
+    allWivesArticlesContainer.id = 'all-wives-recap';
+    allWivesArticlesContainer.classList.add('row');
+    summaryContainer.appendChild(allWivesArticlesContainer);
+
+    // Use global quizData which should be populated.
+    if (quizData && quizData.length > 0) {
+        quizData.forEach(wifeDataEntry => {
+            const wifeCardCol = document.createElement('div');
+            wifeCardCol.className = 'col-md-6 col-lg-4 mb-4';
+
+            const wifeCard = document.createElement('div');
+            wifeCard.className = 'card h-100';
+
+            const wifeCardBody = document.createElement('div');
+            wifeCardBody.className = 'card-body';
+
+            const wifeNameHeader = document.createElement('h5');
+            wifeNameHeader.className = 'card-title';
+            // Attempt to create a more readable name from wifeId if actual name isn't in quizData
+            let displayName = wifeDataEntry.name || wifeDataEntry.wifeId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            wifeNameHeader.textContent = displayName;
+
+            const wifeBio = document.createElement('p');
+            wifeBio.className = 'card-text small';
+            // Placeholder as quiz_data.json doesn't have full bio/fate.
+            // In a real scenario, this data would come from a richer data source.
+            wifeBio.textContent = wifeDataEntry.bio || `Details for ${displayName} would appear here. The original detailed article content is not directly available in quizData for this summary view.`;
+
+            const wifeFate = document.createElement('p');
+            wifeFate.className = 'card-text small fw-bold';
+            wifeFate.textContent = `Fate: ${wifeDataEntry.fate || "Specific fate details not available in current quiz data."}`;
+
+            wifeCardBody.appendChild(wifeNameHeader);
+            wifeCardBody.appendChild(wifeBio);
+            wifeCardBody.appendChild(wifeFate);
+            wifeCard.appendChild(wifeCardBody);
+            wifeCardCol.appendChild(wifeCard);
+            allWivesArticlesContainer.appendChild(wifeCardCol);
+        });
+    } else {
+        allWivesArticlesContainer.innerHTML = '<p class="text-center">Wife information could not be loaded for the recap.</p>';
+    }
+
+
+    // --- 2. Display Question/Answer Log ---
+    const logHeader = document.createElement('h3');
+    logHeader.className = 'mt-5 mb-3 text-center';
+    logHeader.textContent = "Your Quiz Performance";
+    summaryContainer.appendChild(logHeader);
+
+    const logList = document.createElement('ul');
+    logList.className = 'list-group';
+    summaryContainer.appendChild(logList);
+
+    if (log && log.length > 0) {
+        log.forEach(entry => {
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+
+            let content = `
+                <p class="mb-1"><strong>Question:</strong> ${entry.question}</p>
+                <p class="mb-1">Your answer: <span class="fw-bold">${entry.userAnswer}</span></p>
+            `;
+            if (entry.isCorrect) {
+                content += `<p class="mb-0 text-success"><strong>Correct!</strong></p>`;
+                listItem.classList.add('list-group-item-success');
+            } else {
+                content += `<p class="mb-0 text-danger"><strong>Incorrect.</strong> Correct answer: <span class="fw-bold">${entry.correctAnswer}</span></p>`;
+                listItem.classList.add('list-group-item-danger');
+            }
+            listItem.innerHTML = content;
+            logList.appendChild(listItem);
+        });
+    } else {
+        const noLogItem = document.createElement('li');
+        noLogItem.className = 'list-group-item';
+        noLogItem.textContent = 'No quiz history was recorded.';
+        logList.appendChild(noLogItem);
     }
 }
 

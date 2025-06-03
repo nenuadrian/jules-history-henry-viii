@@ -229,33 +229,62 @@ img {
     transition: opacity 300ms ease-in-out;
 }
 
-/* This class can be used to ensure an element is part of the layout flow
-   but initially invisible before fade-in, if display:none was used previously.
-   displayQuiz now handles setting opacity to 0 and display to block before fade-in.
-*/
 .visible {
     /* display: block;  JS sets display:block on wife articles directly */
-    /* Or other appropriate display value like 'flex' if needed */
 }
 
-/* Ensure elements that will be faded start with opacity 0 if they aren't immediately faded in */
-/* The JS now handles setting initial opacity to 0 before adding .fade-in, so this might be redundant
-   but can serve as a fallback if an element is added to DOM and should be hidden before JS acts.
-#quiz-question,
-#quiz-options,
-.wife-article:not(.visible) { /* If not yet marked visible by JS */
-    /* opacity: 0; /* Default to hidden if JS hasn't set them up for fade-in yet */
-/* }
-*/
-
-/* Ensure the quiz container itself doesn't have conflicting transitions if not intended */
 #quiz-container {
     /* Add if needed: transition: none; */
 }
 
-/* Ensure next question button also fades if desired, though JS manages display:none primarily */
-#next-question-btn.fade-in { /* This class is added by JS in handleAnswer */
+#next-question-btn.fade-in {
     opacity: 1 !important;
-    /* display: block !important; /* JS already sets display:block for it */
-    /* transition: opacity 300ms ease-in-out; /* Already on #next-question-btn general rule */
 }
+
+/* Quiz Summary Section Styling */
+#quiz-summary-container {
+    margin-top: 30px; /* Space above the summary section */
+    padding-top: 20px;
+    border-top: 1px solid #dee2e6; /* Bootstrap's default border color for a separator */
+}
+
+#quiz-summary-container h3 { /* Styling for "The Six Wives: A Recap" and "Your Quiz Performance" */
+    color: var(--bs-primary); /* Use the theme's primary color, or a specific color if preferred */
+}
+
+/* Styling for individual wife cards in the recap if Bootstrap defaults aren't enough */
+#all-wives-recap .card {
+    /* Example: Add a slightly different border or shadow if needed */
+    /* border-left: 3px solid var(--bs-secondary); */
+}
+
+#all-wives-recap .card-title { /* Name of the wife */
+    font-weight: bold;
+    color: var(--bs-dark); /* Or theme's heading color */
+}
+
+/* Styling for the Question/Answer Log List */
+#quiz-summary-container .list-group-item p {
+    margin-bottom: 0.5rem; /* Adjust paragraph spacing within list items */
+}
+
+#quiz-summary-container .list-group-item strong {
+    /* Bolder text for "Question:", "Your answer:", "Correct!", "Incorrect." */
+}
+
+/* Ensure user's answer and correct answer spans are clearly visible */
+#quiz-summary-container .list-group-item .fw-bold { /* This class is used in JS for answers */
+    /* color: var(--bs-info); /* Example: make answers a different color if needed */
+}
+
+/* Optional: More distinct styling for list group item states if theme's is too subtle */
+/*
+#quiz-summary-container .list-group-item-success {
+    background-color: #d1e7dd;
+    border-color: #a3cfbb;
+}
+#quiz-summary-container .list-group-item-danger {
+    background-color: #f8d7da;
+    border-color: #f1aeb5;
+}
+*/
