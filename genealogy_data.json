@@ -1,28 +1,385 @@
 {
     "nodes": [
-        { "data": { "id": "henry_viii", "name": "Henry VIII", "type": "king" } },
-        { "data": { "id": "catherine_o_a", "name": "Catherine of Aragon", "type": "queen" } },
-        { "data": { "id": "mary_i", "name": "Mary I", "type": "child" } },
-        { "data": { "id": "anne_b", "name": "Anne Boleyn", "type": "queen" } },
-        { "data": { "id": "elizabeth_i", "name": "Elizabeth I", "type": "child" } },
-        { "data": { "id": "jane_s", "name": "Jane Seymour", "type": "queen" } },
-        { "data": { "id": "edward_vi", "name": "Edward VI", "type": "child" } },
-        { "data": { "id": "anne_o_c", "name": "Anne of Cleves", "type": "queen" } },
-        { "data": { "id": "catherine_h", "name": "Catherine Howard", "type": "queen" } },
-        { "data": { "id": "catherine_p", "name": "Catherine Parr", "type": "queen" } }
+        {
+            "data": {
+                "id": "henry_viii",
+                "name": "Henry VIII",
+                "type": "king"
+            }
+        },
+        {
+            "data": {
+                "id": "catherine_o_a",
+                "name": "Catherine of Aragon",
+                "type": "queen"
+            }
+        },
+        {
+            "data": {
+                "id": "mary_i",
+                "name": "Mary I",
+                "type": "child"
+            }
+        },
+        {
+            "data": {
+                "id": "anne_b",
+                "name": "Anne Boleyn",
+                "type": "queen"
+            }
+        },
+        {
+            "data": {
+                "id": "elizabeth_i",
+                "name": "Elizabeth I",
+                "type": "child"
+            }
+        },
+        {
+            "data": {
+                "id": "jane_s",
+                "name": "Jane Seymour",
+                "type": "queen"
+            }
+        },
+        {
+            "data": {
+                "id": "edward_vi",
+                "name": "Edward VI",
+                "type": "child"
+            }
+        },
+        {
+            "data": {
+                "id": "anne_o_c",
+                "name": "Anne of Cleves",
+                "type": "queen"
+            }
+        },
+        {
+            "data": {
+                "id": "catherine_h",
+                "name": "Catherine Howard",
+                "type": "queen"
+            }
+        },
+        {
+            "data": {
+                "id": "catherine_p",
+                "name": "Catherine Parr",
+                "type": "queen"
+            }
+        },
+        {
+            "data": {
+                "id": "henry_vii",
+                "name": "Henry VII",
+                "type": "king_ancestor"
+            }
+        },
+        {
+            "data": {
+                "id": "elizabeth_of_york",
+                "name": "Elizabeth of York",
+                "type": "queen_ancestor"
+            }
+        },
+        {
+            "data": {
+                "id": "edmund_tudor",
+                "name": "Edmund Tudor",
+                "type": "noble_ancestor"
+            }
+        },
+        {
+            "data": {
+                "id": "margaret_beaufort",
+                "name": "Margaret Beaufort",
+                "type": "noble_ancestor"
+            }
+        },
+        {
+            "data": {
+                "id": "edward_iv",
+                "name": "Edward IV",
+                "type": "king_ancestor"
+            }
+        },
+        {
+            "data": {
+                "id": "elizabeth_woodville",
+                "name": "Elizabeth Woodville",
+                "type": "queen_ancestor"
+            }
+        },
+        {
+            "data": {
+                "id": "mary_tudor_sister_h8",
+                "name": "Mary Tudor (Q. of France)",
+                "type": "noble_ancestor"
+            }
+        },
+        {
+            "data": {
+                "id": "charles_brandon",
+                "name": "Charles Brandon",
+                "type": "noble_ancestor"
+            }
+        },
+        {
+            "data": {
+                "id": "frances_brandon",
+                "name": "Frances Brandon",
+                "type": "noble_ancestor"
+            }
+        },
+        {
+            "data": {
+                "id": "henry_grey",
+                "name": "Henry Grey",
+                "type": "noble_ancestor"
+            }
+        },
+        {
+            "data": {
+                "id": "lady_jane_grey",
+                "name": "Lady Jane Grey",
+                "type": "monarch_successor_claimant"
+            }
+        }
     ],
     "edges": [
-        { "data": { "id": "m_h8_coa", "source": "henry_viii", "target": "catherine_o_a", "relation": "marriage" } },
-        { "data": { "id": "m_h8_ab", "source": "henry_viii", "target": "anne_b", "relation": "marriage" } },
-        { "data": { "id": "m_h8_js", "source": "henry_viii", "target": "jane_s", "relation": "marriage" } },
-        { "data": { "id": "m_h8_aoc", "source": "henry_viii", "target": "anne_o_c", "relation": "marriage" } },
-        { "data": { "id": "m_h8_ch", "source": "henry_viii", "target": "catherine_h", "relation": "marriage" } },
-        { "data": { "id": "m_h8_cp", "source": "henry_viii", "target": "catherine_p", "relation": "marriage" } },
-        { "data": { "id": "pc_h8_mary_i", "source": "henry_viii", "target": "mary_i", "relation": "parent_child" } },
-        { "data": { "id": "pc_coa_mary_i", "source": "catherine_o_a", "target": "mary_i", "relation": "parent_child" } },
-        { "data": { "id": "pc_h8_elizabeth_i", "source": "henry_viii", "target": "elizabeth_i", "relation": "parent_child" } },
-        { "data": { "id": "pc_ab_elizabeth_i", "source": "anne_b", "target": "elizabeth_i", "relation": "parent_child" } },
-        { "data": { "id": "pc_h8_edward_vi", "source": "henry_viii", "target": "edward_vi", "relation": "parent_child" } },
-        { "data": { "id": "pc_js_edward_vi", "source": "jane_s", "target": "edward_vi", "relation": "parent_child" } }
+        {
+            "data": {
+                "id": "m_h8_coa",
+                "source": "henry_viii",
+                "target": "catherine_o_a",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "m_h8_ab",
+                "source": "henry_viii",
+                "target": "anne_b",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "m_h8_js",
+                "source": "henry_viii",
+                "target": "jane_s",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "m_h8_aoc",
+                "source": "henry_viii",
+                "target": "anne_o_c",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "m_h8_ch",
+                "source": "henry_viii",
+                "target": "catherine_h",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "m_h8_cp",
+                "source": "henry_viii",
+                "target": "catherine_p",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_h8_mary_i",
+                "source": "henry_viii",
+                "target": "mary_i",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_coa_mary_i",
+                "source": "catherine_o_a",
+                "target": "mary_i",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_h8_elizabeth_i",
+                "source": "henry_viii",
+                "target": "elizabeth_i",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_ab_elizabeth_i",
+                "source": "anne_b",
+                "target": "elizabeth_i",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_h8_edward_vi",
+                "source": "henry_viii",
+                "target": "edward_vi",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_js_edward_vi",
+                "source": "jane_s",
+                "target": "edward_vi",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "m_h7_eoy",
+                "source": "henry_vii",
+                "target": "elizabeth_of_york",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_h7_h8",
+                "source": "henry_vii",
+                "target": "henry_viii",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_eoy_h8",
+                "source": "elizabeth_of_york",
+                "target": "henry_viii",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "m_et_mb",
+                "source": "edmund_tudor",
+                "target": "margaret_beaufort",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_et_h7",
+                "source": "edmund_tudor",
+                "target": "henry_vii",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_mb_h7",
+                "source": "margaret_beaufort",
+                "target": "henry_vii",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "m_e4_ew",
+                "source": "edward_iv",
+                "target": "elizabeth_woodville",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_e4_eoy",
+                "source": "edward_iv",
+                "target": "elizabeth_of_york",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_ew_eoy",
+                "source": "elizabeth_woodville",
+                "target": "elizabeth_of_york",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_h7_mt",
+                "source": "henry_vii",
+                "target": "mary_tudor_sister_h8",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_eoy_mt",
+                "source": "elizabeth_of_york",
+                "target": "mary_tudor_sister_h8",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "m_cb_mt",
+                "source": "charles_brandon",
+                "target": "mary_tudor_sister_h8",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_cb_fb",
+                "source": "charles_brandon",
+                "target": "frances_brandon",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_mt_fb",
+                "source": "mary_tudor_sister_h8",
+                "target": "frances_brandon",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "m_hg_fb",
+                "source": "henry_grey",
+                "target": "frances_brandon",
+                "relation": "marriage"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_hg_ljg",
+                "source": "henry_grey",
+                "target": "lady_jane_grey",
+                "relation": "parent_child"
+            }
+        },
+        {
+            "data": {
+                "id": "pc_fb_ljg",
+                "source": "frances_brandon",
+                "target": "lady_jane_grey",
+                "relation": "parent_child"
+            }
+        }
     ]
 }

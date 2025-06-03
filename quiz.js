@@ -225,14 +225,33 @@ async function renderD3GenealogyGraph() {
 
         const nodes = rawData.nodes.map(n => {
             const nodeData = { ...n.data };
-            if (nodeData.type === 'king') {
-                nodeData.rank = 0;
-            } else if (nodeData.type === 'queen') {
-                nodeData.rank = 1;
-            } else if (nodeData.type === 'child') {
-                nodeData.rank = 2;
-            } else {
-                nodeData.rank = 3;
+            // Assign rank based on ID for specific known individuals for more control
+            switch (nodeData.id) {
+                case 'edmund_tudor': case 'margaret_beaufort': case 'edward_iv': case 'elizabeth_woodville':
+                    nodeData.rank = 0; break;
+                case 'henry_vii': case 'elizabeth_of_york':
+                    nodeData.rank = 1; break;
+                case 'henry_viii':
+                    nodeData.rank = 2; nodeData.type = nodeData.type || 'king'; break;
+                case 'mary_tudor_sister_h8': case 'charles_brandon':
+                    nodeData.rank = 2; nodeData.type = nodeData.type || 'noble_ancestor'; break;
+                case 'catherine_o_a': case 'anne_b': case 'jane_s': case 'anne_o_c': case 'catherine_h': case 'catherine_p':
+                    nodeData.rank = 3; nodeData.type = nodeData.type || 'queen'; break;
+                case 'frances_brandon': case 'henry_grey':
+                    nodeData.rank = 3; nodeData.type = nodeData.type || 'noble_ancestor'; break;
+                case 'mary_i': case 'elizabeth_i': case 'edward_vi':
+                    nodeData.rank = 4; nodeData.type = nodeData.type || 'child'; break;
+                case 'lady_jane_grey':
+                    nodeData.rank = 4; nodeData.type = nodeData.type || 'monarch_successor_claimant'; break;
+                default:
+                    // Fallback based on existing type if not ID-matched
+                    if (nodeData.type === 'king_ancestor' || nodeData.type === 'queen_ancestor') nodeData.rank = 1; // Generalize other ancestors
+                    else if (nodeData.type === 'noble_ancestor') nodeData.rank = 2; // Other nobles
+                    else {
+                        console.warn(`Node ${nodeData.id} not explicitly ranked by ID or general type, assigning fallback rank 5.`);
+                        nodeData.rank = 5;
+                    }
+                    break;
             }
             return nodeData;
         });
@@ -251,16 +270,22 @@ async function renderD3GenealogyGraph() {
 
         const g = svg.append("g");
 
-        const Y_SEPARATION_FACTOR = 160;
+        const Y_SEPARATION_FACTOR = 120;
         const simulation = d3.forceSimulation(nodes)
             .force("link", d3.forceLink(links)
                               .id(d => d.id)
-                              .distance(d => d.relation === 'marriage' ? 80 : 100)
+                              .distance(d => d.relation === 'marriage' ? 60 : 90)
                               .strength(d => d.relation === 'marriage' ? 0.1 : 0.4))
-            .force("charge", d3.forceManyBody().strength(-350))
+            .force("charge", d3.forceManyBody().strength(-450))
             .force("center", d3.forceCenter(width / 2, height / 2).strength(0.05))
-            .force("collide", d3.forceCollide().radius(d => (d.type === 'king' ? 45 : (d.type === 'queen' ? 35 : 25)) + 10))
-            .force("yPos", d3.forceY().y(d => d.rank * Y_SEPARATION_FACTOR).strength(0.3));
+            .force("collide", d3.forceCollide().radius(d =>
+                (d.type === 'king' ? 40 :
+                (d.type === 'queen' ? 30 :
+                (d.type === 'child' || d.type === 'monarch_successor_claimant' ? 20 :
+                (d.type === 'king_ancestor' || d.type === 'queen_ancestor' ? 30 : 25) // Radii for ancestors
+                ))) + 12)
+            )
+            .force("yPos", d3.forceY().y(d => d.rank * Y_SEPARATION_FACTOR).strength(0.4));
 
 
         const link = g.append("g")
@@ -297,17 +322,26 @@ async function renderD3GenealogyGraph() {
             .on("end", function(event, d) {
                 if (!event.active) simulation.alphaTarget(0);
                 d.fx = null;
-                d.fy = null; // Allow Y force to reposition after drag
+                d.fy = null;
             });
 
         nodeGroup.call(drag);
 
         nodeGroup.append("circle")
-            .attr("r", d => d.type === 'king' ? 40 : (d.type === 'queen' ? 30 : 20))
+            .attr("r", d =>
+                (d.type === 'king' ? 40 :
+                (d.type === 'queen' ? 30 :
+                (d.type === 'child' || d.type === 'monarch_successor_claimant' ? 20 :
+                (d.type === 'king_ancestor' || d.type === 'queen_ancestor' ? 30 : 25) // Radii for ancestors
+                )))
+            )
             .attr("fill", d => {
                 if (d.type === 'king') return "#ADD8E6";
                 if (d.type === 'queen') return "#FFC0CB";
-                if (d.type === 'child') return "#90EE90";
+                if (d.type === 'child' || d.type === 'monarch_successor_claimant') return "#90EE90";
+                if (d.type === 'king_ancestor') return "#B0E0E6"; // Lighter blue for king ancestors
+                if (d.type === 'queen_ancestor') return "#FFDAB9"; // Peach for queen ancestors
+                if (d.type === 'noble_ancestor') return "#D3D3D3"; // Light grey for other nobles
                 return "#808080";
             })
             .attr("stroke", "#fff")
@@ -316,9 +350,15 @@ async function renderD3GenealogyGraph() {
         nodeGroup.append("text")
             .text(d => d.name)
             .attr("x", 0)
-            .attr("y", d => (d.type === 'king' ? 55 : (d.type === 'queen' ? 42 : 30)))
+            .attr("y", d => { // Adjust y based on new radii
+                if (d.type === 'king') return 55; // radius 40
+                if (d.type === 'queen') return 42; // radius 30
+                if (d.type === 'child' || d.type === 'monarch_successor_claimant') return 30; // radius 20
+                if (d.type === 'king_ancestor' || d.type === 'queen_ancestor') return 42; // radius 30
+                return 35; // radius 25 (noble_ancestor and default)
+            })
             .attr("text-anchor", "middle")
-            .style("font-size", "10px")
+            .style("font-size", "9px") // Slightly smaller for potentially more text
             .style("fill", "#333")
             .style("pointer-events", "none");
 

@@ -8,8 +8,9 @@ This project is an interactive web application that tests your knowledge about t
 *   **Animated Transitions:** Smooth fade-in/fade-out animations between quiz questions.
 *   **Dynamic Genealogical Graph:**
     *   Displayed after successfully completing the quiz.
-    *   Rendered using D3.js with a force-directed layout.
-    *   Interactive: Supports panning, zooming, and dragging nodes.
+    *   Rendered using D3.js with a force-directed layout, adjusted for a hierarchical appearance.
+    *   Includes key ancestors of Henry VIII (parents, grandparents) and related figures like Lady Jane Grey to illustrate broader family connections.
+    *   Interactive: Supports panning, zooming, and dragging nodes (nodes return to their rank).
     *   Click on nodes (individuals) to see basic information.
 *   **Post-Quiz Summary:**
     *   **Wives Recap:** Displays information cards for all six wives. (Current biographical details are placeholders in the JavaScript data and can be expanded).
@@ -41,7 +42,7 @@ This project is an interactive web application that tests your knowledge about t
     *   Displaying the post-quiz summary.
     *   Event handling.
 *   `quiz_data.json`: Stores the questions, options, and correct answers for the quiz.
-*   `genealogy_data.json`: Stores the nodes (individuals) and edges (relationships) for the D3.js family tree.
+*   `genealogy_data.json`: Stores the nodes (individuals like Henry VIII, his wives, children, key ancestors, and related figures) and edges (relationships) for the D3.js family tree.
 *   `images/`: Currently unused directory (initially intended for static images).
 
 ## How to View
