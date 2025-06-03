@@ -332,14 +332,7 @@ img {
     font-weight: 600;
 }
 
-
-.wife-article {
-    display: none;
-    opacity: 0;
-}
-.wife-article.visible {
-    display: block;
-}
+/* .wife-article related rules that controlled JS visibility removed */
 
 #genealogy-graph-container {
     margin-top: 20px;
