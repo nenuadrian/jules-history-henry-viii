@@ -11,19 +11,9 @@ function displayQuiz() {
     const quizFeedbackElement = document.getElementById('quiz-feedback');
     const nextQuestionButton = document.getElementById('next-question-btn');
 
-    const wifeArticles = document.querySelectorAll('.wife-article');
-    let previousWifeArticleToFade = null;
-
-    wifeArticles.forEach(article => {
-        const style = window.getComputedStyle(article);
-        if (style.display === 'block' && (style.opacity === '1' || article.classList.contains('fade-in'))) {
-            previousWifeArticleToFade = article;
-        }
-    });
-
     const isQuestionAreaPopulated = quizQuestionElement && quizQuestionElement.textContent !== "Question will appear here." && quizQuestionElement.textContent !== "";
 
-    const elementsToFadeOut = [quizQuestionElement, quizOptionsElement, previousWifeArticleToFade].filter(el => el);
+    const elementsToFadeOut = [quizQuestionElement, quizOptionsElement].filter(el => el);
 
     const setupAndFadeInNewContent = () => {
         if (!quizData || currentWifeIndex >= quizData.length) {
@@ -32,22 +22,6 @@ function displayQuiz() {
         }
 
         const currentWifeData = quizData[currentWifeIndex];
-        const newWifeArticle = document.getElementById(currentWifeData.wifeId);
-
-        wifeArticles.forEach(article => {
-            article.style.display = 'none';
-            article.classList.remove('fade-in', 'fade-out', 'visible');
-            article.style.opacity = '';
-        });
-
-        if (newWifeArticle) {
-            newWifeArticle.classList.remove('fade-out');
-            newWifeArticle.style.opacity = '0';
-            newWifeArticle.style.display = 'block';
-            newWifeArticle.classList.add('visible');
-            void newWifeArticle.offsetWidth;
-            newWifeArticle.classList.add('fade-in');
-        }
 
         if (quizQuestionElement) {
             quizQuestionElement.textContent = currentWifeData.question;
@@ -85,7 +59,7 @@ function displayQuiz() {
         }
     };
 
-    const isFirstDisplay = !isQuestionAreaPopulated && !previousWifeArticleToFade;
+    const isFirstDisplay = !isQuestionAreaPopulated;
 
     if (isFirstDisplay) {
         setupAndFadeInNewContent();
@@ -93,9 +67,6 @@ function displayQuiz() {
         elementsToFadeOut.forEach(el => {
             el.classList.remove('fade-in');
             el.classList.add('fade-out');
-            if (el.classList.contains('wife-article')) {
-                el.classList.remove('visible');
-            }
         });
         setTimeout(setupAndFadeInNewContent, quizTransitionDuration);
     }
@@ -161,16 +132,7 @@ function loadNextQuestion() {
         const quizFeedbackElement = document.getElementById('quiz-feedback');
         const nextQuestionButton = document.getElementById('next-question-btn');
 
-        const wifeArticles = document.querySelectorAll('.wife-article');
-        let lastWifeArticle = null;
-        wifeArticles.forEach(article => {
-            const style = window.getComputedStyle(article);
-            if (style.display === 'block' && (style.opacity === '1' || article.classList.contains('fade-in'))) {
-                lastWifeArticle = article;
-            }
-        });
-
-        const elementsToFadeOut = [quizQuestionElement, quizOptionsElement, quizFeedbackElement, lastWifeArticle, nextQuestionButton].filter(el => el);
+        const elementsToFadeOut = [quizQuestionElement, quizOptionsElement, quizFeedbackElement, nextQuestionButton].filter(el => el);
 
         elementsToFadeOut.forEach(el => {
             if (el) {
@@ -181,19 +143,9 @@ function loadNextQuestion() {
 
         setTimeout(() => {
             if (quizContainer) {
-                quizContainer.innerHTML = '<h2>Quiz Complete! View the Tudor Family Tree & Summary:</h2>' +
-                                          '<div id="genealogy-graph-container"><div id="genealogy-graph"></div></div>' +
-                                          '<div id="quiz-summary-container"></div>';
-
-                renderD3GenealogyGraph();
-
+                quizContainer.innerHTML = '<h2>Quiz Complete!</h2><div id="quiz-summary-container"></div>';
                 displayQuizSummary(userQuizLog);
             }
-            document.querySelectorAll('.wife-article').forEach(article => {
-                article.style.display = 'none';
-                article.classList.remove('visible', 'fade-in', 'fade-out');
-                article.style.opacity = '';
-            });
         }, quizTransitionDuration);
     }
 }
@@ -394,55 +346,9 @@ function displayQuizSummary(log) {
     }
     summaryContainer.innerHTML = ''; // Clear any previous content
 
-    // --- 1. Display All Wives' Information (Reconstruction from quizData) ---
-    const wivesHeader = document.createElement('h3');
-    wivesHeader.className = 'mt-4 mb-3 text-center';
-    wivesHeader.textContent = "The Six Wives: A Recap";
-    summaryContainer.appendChild(wivesHeader);
-
-    const allWivesArticlesContainer = document.createElement('div');
-    allWivesArticlesContainer.id = 'all-wives-recap';
-    allWivesArticlesContainer.classList.add('row');
-    summaryContainer.appendChild(allWivesArticlesContainer);
-
-    if (quizData && quizData.length > 0) {
-        quizData.forEach(wifeDataEntry => {
-            const wifeCardCol = document.createElement('div');
-            wifeCardCol.className = 'col-md-6 col-lg-4 mb-4 d-flex align-items-stretch';
-
-            const wifeCard = document.createElement('div');
-            wifeCard.className = 'card h-100';
-
-            const wifeCardBody = document.createElement('div');
-            wifeCardBody.className = 'card-body d-flex flex-column';
-
-            const wifeNameHeader = document.createElement('h5');
-            wifeNameHeader.className = 'card-title';
-            let displayName = wifeDataEntry.name || wifeDataEntry.wifeId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-            wifeNameHeader.textContent = displayName;
-
-            const wifeBio = document.createElement('p');
-            wifeBio.className = 'card-text small flex-grow-1';
-            wifeBio.textContent = wifeDataEntry.bio || `Full biography for ${displayName} would be displayed here if available in the quiz data.`;
-
-            const wifeFate = document.createElement('p');
-            wifeFate.className = 'card-text small fw-bold mt-auto';
-            wifeFate.textContent = `Fate: ${wifeDataEntry.fate || "Details on fate not in quiz data."}`;
-
-            wifeCardBody.appendChild(wifeNameHeader);
-            wifeCardBody.appendChild(wifeBio);
-            wifeCardBody.appendChild(wifeFate);
-            wifeCard.appendChild(wifeCardBody);
-            wifeCardCol.appendChild(wifeCard);
-            allWivesArticlesContainer.appendChild(wifeCardCol);
-        });
-    } else {
-        allWivesArticlesContainer.innerHTML = '<p class="text-center col-12">Wife information could not be loaded for the recap.</p>';
-    }
-
-    // --- 2. Display Question/Answer Log ---
+    // Display Question/Answer Log
     const logHeader = document.createElement('h3');
-    logHeader.className = 'mt-5 mb-3 text-center';
+    logHeader.className = 'mt-5 mb-3 text-center'; // Adjusted mt-5 to mt-4 or similar if needed, but keeping for now
     logHeader.textContent = "Your Quiz Performance";
     summaryContainer.appendChild(logHeader);
 
