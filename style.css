@@ -1,34 +1,166 @@
-/* === Original Body and General Styles (Keep As Is) === */
-/* body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    margin: 20px;
-    background-color: #f4f4f4;
-    color: #333;
-} */
+:root {
+    --bs-primary-rgb: 44, 62, 80; /* Deep Desaturated Blue */
+    --bs-primary: rgb(var(--bs-primary-rgb));
+    --bs-secondary-rgb: 176, 141, 87; /* Muted Gold/Brass */
+    --bs-secondary: rgb(var(--bs-secondary-rgb));
 
-/* h1 {
-    text-align: center;
-    color: #502900;
-} */
+    --color-dark-primary: #2c3e50;
+    --color-accent-gold: #b08d57;
+    --color-light-bg: #f8f9fa;
+    --color-text-standard: #34495e;
+    --color-white: #ffffff;
+    --color-light-grey-border: #e0e0e0;
+    --color-light-green-bg: #e6f7e9; /* For success list items */
+    --color-light-red-bg: #f8d7da;   /* For danger list items */
+
+
+    --font-primary: 'Montserrat', sans-serif;
+    --font-accent-serif: 'Playfair Display', serif;
+
+    --default-shadow: 0 5px 15px rgba(44, 62, 80, 0.1);
+    --stronger-shadow: 0 8px 25px rgba(44, 62, 80, 0.15);
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--color-light-bg);
+    color: var(--color-text-standard);
+    line-height: 1.7;
+}
+
+/* Sharp corners for common Bootstrap components */
+.btn, .card, .form-control, .navbar, .list-group-item, .alert,
+#quiz-container, #genealogy-graph-container,
+article
+{
+    border-radius: 0 !important;
+}
+
+/* Apply default shadow and border to card-like elements */
+.card, #quiz-container, #genealogy-graph-container, article {
+    box-shadow: var(--default-shadow);
+    border: 1px solid var(--color-light-grey-border);
+}
+
+/* Ensure Bootstrap uses our primary/secondary for its components */
+.text-primary { color: var(--bs-primary) !important; }
+.bg-primary { background-color: var(--bs-primary) !important; }
+.border-primary { border-color: var(--bs-primary) !important; }
+
+.text-secondary { color: var(--bs-secondary) !important; }
+.bg-secondary { background-color: var(--bs-secondary) !important; }
+.border-secondary { border-color: var(--bs-secondary) !important; }
+
+a {
+    color: var(--bs-primary);
+    text-decoration: none;
+}
+a:hover {
+    color: var(--color-accent-gold);
+    text-decoration: underline;
+}
+
+/* === Global Element Styling === */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-primary);
+    color: var(--color-dark-primary);
+    margin-bottom: 0.75rem;
+}
+
+h1 {
+    font-family: var(--font-accent-serif);
+    font-weight: 700;
+}
+
+h2, h3, h4, h5, h6 {
+    font-weight: 600;
+}
+
+/* Default .btn styling */
+.btn {
+    /* border: 1px solid var(--color-dark-primary); -- overridden by specific btn types */
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, opacity 300ms ease-in-out;
+}
+
+/* .btn-primary styling (general purpose, not quiz options) */
+.btn-primary {
+    background-color: var(--bs-primary);
+    color: var(--color-white);
+    border-color: var(--bs-primary);
+    padding: 0.6rem 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    box-shadow: var(--default-shadow);
+}
+
+.btn-primary:hover {
+    background-color: #1f2c3a;
+    border-color: #1f2c3a;
+    transform: translateY(-2px);
+    box-shadow: var(--stronger-shadow);
+}
+
+/* .btn-success styling (used by Next Question Button) */
+.btn-success {
+    background-color: var(--color-accent-gold) !important;
+    color: var(--color-white) !important;
+    border-color: var(--color-accent-gold) !important;
+    padding: 0.6rem 1.2rem; /* Consistent padding */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    box-shadow: var(--default-shadow);
+}
+
+.btn-success:hover {
+    background-color: #93703c !important;
+    border-color: #93703c !important;
+    transform: translateY(-2px);
+    box-shadow: var(--stronger-shadow);
+}
+
+
+/* Navbar styling */
+.navbar {
+    background-color: var(--color-white) !important;
+    box-shadow: var(--default-shadow);
+    padding: 0.75rem 1.5rem;
+}
+
+.navbar-brand {
+    font-family: var(--font-accent-serif);
+    color: var(--color-dark-primary) !important;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.navbar .nav-link {
+    color: var(--color-text-standard) !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.5rem 1rem !important;
+    border-bottom: 2px solid transparent;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: var(--color-accent-gold) !important;
+    border-bottom: 2px solid var(--color-accent-gold);
+}
 
 h2 {
-    /* color: #7a3d00; */ /* Let theme handle color */
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--color-light-grey-border);
     padding-bottom: 5px;
 }
 
 article {
-    background-color: #fff; /* Keep for wife articles if theme doesn't provide card-like bg */
+    background-color: var(--color-white);
     padding: 15px;
     margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
-/* p {
-    margin-bottom: 10px;
-} */
 
 img {
     max-width: 200px;
@@ -36,27 +168,21 @@ img {
     display: block;
     margin-top: 10px;
     margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    border: 1px solid var(--color-light-grey-border);
     margin-left: auto;
     margin-right: auto;
 }
 
-/* === Enhanced Quiz Container Styling === */
+/* === Quiz Container Styling === */
 #quiz-container {
-    /* background-image: linear-gradient(to bottom right, #fdfdfd, #f0f0f0); */ /* Remove to use theme's bg */
-    /* border: 1px solid #d8d8d8; */ /* Remove to use theme's panel/card styling if any */
-    border-radius: 12px;
     padding: 25px;
     margin-top: 25px;
     margin-bottom: 35px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Keep shadow for depth */
-    background-color: #fff; /* Add a default white background if theme's body bg is too dark */
+    background-color: var(--color-white);
 }
 
 #quiz-question {
     font-size: 1.4em;
-    /* color: #333; */ /* Let theme handle color */
     margin-bottom: 20px;
     font-weight: 600;
 }
@@ -64,178 +190,132 @@ img {
 #quiz-options {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Reduced gap as w-100 buttons have mb-2 */
+    gap: 10px;
     margin-bottom: 20px;
 }
 
-/* === Enhanced Button Styling (General) === */
-.quiz-option-btn, #next-question-btn {
-    /* border: none; Provided by .btn */
-    /* padding: 12px 18px; Provided by .btn */
-    /* font-size: 1em; Provided by .btn */
-    /* border-radius: 6px; Provided by .btn */
-    /* cursor: pointer; Provided by .btn */
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, opacity 300ms ease-in-out;
-    font-weight: 500;
-    /* text-align: center; Provided by .btn or .w-100 text helpers if needed */
-}
-
-.quiz-option-btn:focus, #next-question-btn:focus {
-    outline: 2px solid #80adda; /* Keep custom focus if theme's is not distinct enough */
-    outline-offset: 2px;
-    box-shadow: 0 0 0 3px rgba(128, 173, 218, 0.5);
-}
-
-/* === Enhanced Quiz Option Buttons === */
-.quiz-option-btn { /* Works with .btn .btn-outline-primary .w-100 .mb-2 */
-    background-color: #5D3A1A !important; /* Custom color over theme's outline */
-    color: white !important;
-    border-color: #5D3A1A !important; /* Match border to background for solid look */
+/* === Quiz Option Buttons (Specific) === */
+/* JS adds .btn .btn-outline-primary .quiz-option-btn .w-100 .mb-2 */
+.quiz-option-btn {
+    background-color: var(--bs-primary) !important;
+    color: var(--color-white) !important;
+    border-color: var(--bs-primary) !important;
+    font-weight: 500; /* From previous general rule */
+    text-transform: none; /* Override any potential uppercase from .btn-primary if it was used as base */
+    letter-spacing: normal;
+    box-shadow: none; /* Flatter look for options */
 }
 
 .quiz-option-btn:hover:not(:disabled) {
-    background-color: #7a5029 !important;
-    border-color: #7a5029 !important;
+    background-color: #1f2c3a !important; /* Darker shade of --bs-primary */
+    border-color: #1f2c3a !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    box-shadow: var(--default-shadow); /* Add shadow on hover */
 }
+/* Disabled state: Bootstrap's .btn-outline-primary:disabled should be sufficient with theme. */
 
-/* Bootstrap's .btn-outline-primary:disabled handles this well enough with the theme.
-   If more specific styling is needed, uncomment and adjust.
-.quiz-option-btn:disabled {
-    background-color: #E0E0E0 !important;
-    color: #888888 !important;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-} */
 
-/* === Enhanced Feedback Message === */
 #quiz-feedback {
     font-size: 1.1em;
     font-weight: bold;
     margin-bottom: 20px;
     min-height: 1.5em;
     padding: 5px;
-    border-radius: 4px;
 }
 
-/* === Enhanced Next Question Button === */
-/* #next-question-btn is now .btn .btn-success .mt-3 */
-/* Theme's .btn-success will apply. Add overrides if theme's look is not desired. */
-#next-question-btn:hover { /* Keep custom hover effects if desired over theme's .btn-success:hover */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(40,167,69,0.25); /* Example, may need color from theme's success */
+#next-question-btn { /* Has .btn .btn-success .mt-3 from HTML */
+    font-weight: 600; /* Ensure consistency if not covered by .btn-success override */
+}
+#next-question-btn:hover {
+    /* transform and shadow already defined in .btn-success:hover */
 }
 
-/* === Wife Article Styling (Keep As Is or Minor Adjust) === */
 .wife-article {
     display: none;
-    opacity: 0; /* Start transparent for fade-in effect */
+    opacity: 0;
 }
-.wife-article.visible { /* JS will add .visible and .fade-in simultaneously after setting display:block */
-    display: block; /* Ensure it's in layout flow */
+.wife-article.visible {
+    display: block;
 }
 
-
-/* Genealogy Graph Styling */
+/* === Genealogy Graph Styling === */
 #genealogy-graph-container {
     margin-top: 20px;
-    border: 2px solid var(--bs-primary); /* Use theme's primary color */
-    border-radius: 8px;
     padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background-color: var(--color-white);
 }
 
 #genealogy-graph {
     width: 100%;
     height: 500px;
     display: block;
-    background-color: #fefefa;
+    background-color: var(--color-light-bg);
 }
 
-/* Styling for the completion message header, if needed */
 #quiz-container h2 {
     margin-bottom: 15px;
-    /* color: #502900; */ /* Let theme handle color */
 }
 
 /* D3 Graph Specific Styles */
-
-/* Style for the main SVG container (already has ID #genealogy-graph) */
 #genealogy-graph svg {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Consistent font */
-    border: 1px solid #eee; /* A light border for the SVG itself if needed */
+    font-family: var(--font-primary);
 }
 
-/* Link/Edge Styling */
-.links line { /* Targeting lines created by D3 */
+.links line {
     stroke-opacity: 0.7;
     transition: stroke-opacity 0.2s ease-in-out, stroke 0.2s ease-in-out;
 }
 
 .links line:hover {
     stroke-opacity: 1;
-    stroke: #555; /* Darken on hover */
+    stroke: var(--color-text-standard);
 }
 
-/* Node Group Styling (the <g> element for circle + text) */
 .nodes g {
     cursor: pointer;
 }
 
-/* Node Circle Styling */
 .nodes circle {
-    stroke: #fff; /* White border around circles */
+    stroke: var(--color-white);
     stroke-width: 1.5px;
     transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
 }
 
-.nodes g:hover circle { /* Hover effect on the group, applied to circle */
+.nodes g:hover circle {
     transform: scale(1.1);
-    /* filter: drop-shadow(0px 0px 3px rgba(0,0,0,0.3)); // A subtle shadow */
 }
 
-/* Node Label Styling */
 .nodes text {
     font-size: 10px;
-    fill: #333;
-    paint-order: stroke; /* Draw stroke underneath fill for text */
-    stroke: #fff; /* White outline for text readability */
+    fill: var(--color-text-standard);
+    paint-order: stroke;
+    stroke: var(--color-white);
     stroke-width: 2px;
     stroke-linecap: butt;
     stroke-linejoin: miter;
-    pointer-events: none; /* Text should not capture mouse events from circle */
-    text-anchor: middle; /* Ensure it's middle aligned if not set by attr */
+    pointer-events: none;
+    text-anchor: middle;
 }
 
-/* Specific type styling (colors are set by attributes, but other things can be here) */
-.nodes g[data-type="king"] text { /* Example if we were to add data-type to node group */
+.nodes g[data-type="king"] text {
     font-weight: bold;
 }
-.nodes g[data-type="queen"] text {
-    /* font-style: italic; */
-}
+.nodes g[data-type="queen"] text { }
 
 /* Quiz Animation Styles */
 .fade-in {
-    opacity: 1 !important; /* Target opacity */
+    opacity: 1 !important;
     transition: opacity 300ms ease-in-out;
 }
 
 .fade-out {
-    opacity: 0 !important; /* Target opacity */
+    opacity: 0 !important;
     transition: opacity 300ms ease-in-out;
 }
 
-.visible {
-    /* display: block;  JS sets display:block on wife articles directly */
-}
+.visible { }
 
-#quiz-container {
-    /* Add if needed: transition: none; */
-}
+#quiz-container { }
 
 #next-question-btn.fade-in {
     opacity: 1 !important;
@@ -243,48 +323,43 @@ img {
 
 /* Quiz Summary Section Styling */
 #quiz-summary-container {
-    margin-top: 30px; /* Space above the summary section */
+    margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid #dee2e6; /* Bootstrap's default border color for a separator */
+    border-top: 1px solid var(--color-light-grey-border);
 }
 
-#quiz-summary-container h3 { /* Styling for "The Six Wives: A Recap" and "Your Quiz Performance" */
-    color: var(--bs-primary); /* Use the theme's primary color, or a specific color if preferred */
+#quiz-summary-container h3 {
+    color: var(--bs-primary);
 }
 
-/* Styling for individual wife cards in the recap if Bootstrap defaults aren't enough */
-#all-wives-recap .card {
-    /* Example: Add a slightly different border or shadow if needed */
-    /* border-left: 3px solid var(--bs-secondary); */
-}
+#all-wives-recap .card { } /* Default card styling from global rule applies */
 
 #all-wives-recap .card-title { /* Name of the wife */
-    font-weight: bold;
-    color: var(--bs-dark); /* Or theme's heading color */
+    font-family: var(--font-accent-serif);
+    color: var(--color-dark-primary);
+    font-size: 1.25rem;
 }
 
-/* Styling for the Question/Answer Log List */
+#quiz-summary-container .list-group-item {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-light-grey-border);
+    margin-bottom: -1px; /* Overlap borders like default Bootstrap */
+}
 #quiz-summary-container .list-group-item p {
-    margin-bottom: 0.5rem; /* Adjust paragraph spacing within list items */
+    margin-bottom: 0.5rem;
 }
 
-#quiz-summary-container .list-group-item strong {
-    /* Bolder text for "Question:", "Your answer:", "Correct!", "Incorrect." */
-}
+#quiz-summary-container .list-group-item strong { }
 
-/* Ensure user's answer and correct answer spans are clearly visible */
-#quiz-summary-container .list-group-item .fw-bold { /* This class is used in JS for answers */
-    /* color: var(--bs-info); /* Example: make answers a different color if needed */
-}
+#quiz-summary-container .list-group-item .fw-bold { }
 
-/* Optional: More distinct styling for list group item states if theme's is too subtle */
-/*
 #quiz-summary-container .list-group-item-success {
-    background-color: #d1e7dd;
-    border-color: #a3cfbb;
+    background-color: var(--color-light-green-bg) !important;
+    color: var(--bs-success-text-emphasis); /* Bootstrap 5 variable */
+    border-color: var(--bs-success-border-subtle); /* Bootstrap 5 variable */
 }
 #quiz-summary-container .list-group-item-danger {
-    background-color: #f8d7da;
-    border-color: #f1aeb5;
+    background-color: var(--color-light-red-bg) !important;
+    color: var(--bs-danger-text-emphasis); /* Bootstrap 5 variable */
+    border-color: var(--bs-danger-border-subtle); /* Bootstrap 5 variable */
 }
-*/
