@@ -3,7 +3,7 @@
 const quizTransitionDuration = 300; // milliseconds
 let quizData = [];
 let currentWifeIndex = 0;
-// let userQuizLog = []; // Ensuring this is fully removed
+let userQuizLog = []; // Initialize log for user's answers
 
 function displayQuiz() {
     const quizQuestionElement = document.getElementById('quiz-question');
@@ -123,7 +123,13 @@ function handleAnswer(selectedOptionText) {
 
     const isCorrect = selectedOptionText === currentWifeData.correctAnswer;
 
-    // userQuizLog.push({...}); // Block removed
+    userQuizLog.push({
+        question: currentWifeData.question,
+        userAnswer: selectedOptionText,
+        correctAnswer: currentWifeData.correctAnswer,
+        isCorrect: isCorrect,
+        wifeId: currentWifeData.wifeId
+    });
 
     if (isCorrect) {
         quizFeedbackElement.textContent = "Correct!";
@@ -175,12 +181,13 @@ function loadNextQuestion() {
 
         setTimeout(() => {
             if (quizContainer) {
-                quizContainer.innerHTML = '<h2>Quiz Complete! View the Tudor Family Tree:</h2>' + // "& Summary" removed
-                                          '<div id="genealogy-graph-container"><div id="genealogy-graph"></div></div>'; // summary container div removed
+                quizContainer.innerHTML = '<h2>Quiz Complete! View the Tudor Family Tree & Summary:</h2>' +
+                                          '<div id="genealogy-graph-container"><div id="genealogy-graph"></div></div>' +
+                                          '<div id="quiz-summary-container"></div>';
 
                 renderD3GenealogyGraph();
 
-                // displayQuizSummary(userQuizLog); // This line was already correctly removed/commented in the previous effective state
+                displayQuizSummary(userQuizLog);
             }
             document.querySelectorAll('.wife-article').forEach(article => {
                 article.style.display = 'none';
@@ -379,7 +386,90 @@ async function renderD3GenealogyGraph() {
     }
 }
 
-// displayQuizSummary function was here - ensuring it's removed
+function displayQuizSummary(log) {
+    const summaryContainer = document.getElementById('quiz-summary-container');
+    if (!summaryContainer) {
+        console.error('Quiz summary container (#quiz-summary-container) not found in DOM.');
+        return;
+    }
+    summaryContainer.innerHTML = ''; // Clear any previous content
+
+    // --- 1. Display All Wives' Information (Reconstruction from quizData) ---
+    const wivesHeader = document.createElement('h3');
+    wivesHeader.className = 'mt-4 mb-3 text-center';
+    wivesHeader.textContent = "The Six Wives: A Recap";
+    summaryContainer.appendChild(wivesHeader);
+
+    const allWivesArticlesContainer = document.createElement('div');
+    allWivesArticlesContainer.id = 'all-wives-recap';
+    allWivesArticlesContainer.classList.add('row');
+    summaryContainer.appendChild(allWivesArticlesContainer);
+
+    if (quizData && quizData.length > 0) {
+        quizData.forEach(wifeDataEntry => {
+            const wifeCardCol = document.createElement('div');
+            wifeCardCol.className = 'col-md-6 col-lg-4 mb-4 d-flex align-items-stretch';
+
+            const wifeCard = document.createElement('div');
+            wifeCard.className = 'card h-100';
+
+            const wifeCardBody = document.createElement('div');
+            wifeCardBody.className = 'card-body d-flex flex-column';
+
+            const wifeNameHeader = document.createElement('h5');
+            wifeNameHeader.className = 'card-title';
+            let displayName = wifeDataEntry.name || wifeDataEntry.wifeId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            wifeNameHeader.textContent = displayName;
+
+            const wifeBio = document.createElement('p');
+            wifeBio.className = 'card-text small flex-grow-1';
+            wifeBio.textContent = wifeDataEntry.bio || `Full biography for ${displayName} would be displayed here if available in the quiz data.`;
+
+            const wifeFate = document.createElement('p');
+            wifeFate.className = 'card-text small fw-bold mt-auto';
+            wifeFate.textContent = `Fate: ${wifeDataEntry.fate || "Details on fate not in quiz data."}`;
+
+            wifeCardBody.appendChild(wifeNameHeader);
+            wifeCardBody.appendChild(wifeBio);
+            wifeCardBody.appendChild(wifeFate);
+            wifeCard.appendChild(wifeCardBody);
+            wifeCardCol.appendChild(wifeCard);
+            allWivesArticlesContainer.appendChild(wifeCardCol);
+        });
+    } else {
+        allWivesArticlesContainer.innerHTML = '<p class="text-center col-12">Wife information could not be loaded for the recap.</p>';
+    }
+
+    // --- 2. Display Question/Answer Log ---
+    const logHeader = document.createElement('h3');
+    logHeader.className = 'mt-5 mb-3 text-center';
+    logHeader.textContent = "Your Quiz Performance";
+    summaryContainer.appendChild(logHeader);
+
+    const logList = document.createElement('ul');
+    logList.className = 'list-group list-group-flush';
+    summaryContainer.appendChild(logList);
+
+    if (log && log.length > 0) {
+        log.forEach(entry => {
+            const listItem = document.createElement('li');
+            listItem.className = `list-group-item ${entry.isCorrect ? 'list-group-item-success' : 'list-group-item-danger'}`;
+
+            listItem.innerHTML = `
+                <p class="mb-1"><strong>Question for ${entry.wifeId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}:</strong><br>${entry.question}</p>
+                <p class="mb-1">Your answer: <span class="fw-bold">${entry.userAnswer}</span></p>
+                ${!entry.isCorrect ? `<p class="mb-0">Correct answer: <span class="fw-bold">${entry.correctAnswer}</span></p>` : '<p class="mb-0"><strong>Correct!</strong></p>'}
+            `;
+            logList.appendChild(listItem);
+        });
+    } else {
+        const noLogItem = document.createElement('li');
+        noLogItem.className = 'list-group-item';
+        noLogItem.textContent = 'No quiz history was recorded.';
+        logList.appendChild(noLogItem);
+    }
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
     // Check if we are on a page that requires quiz initialization
