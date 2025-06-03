@@ -223,7 +223,20 @@ async function renderD3GenealogyGraph() {
         }
         const rawData = await response.json();
 
-        const nodes = rawData.nodes.map(n => ({ ...n.data }));
+        const nodes = rawData.nodes.map(n => {
+            const nodeData = { ...n.data };
+            if (nodeData.type === 'king') {
+                nodeData.rank = 0;
+            } else if (nodeData.type === 'queen') {
+                nodeData.rank = 1;
+            } else if (nodeData.type === 'child') {
+                nodeData.rank = 2;
+            } else {
+                nodeData.rank = 3;
+            }
+            return nodeData;
+        });
+
         const links = rawData.edges.map(e => ({ ...e.data }));
 
         const width = graphDisplayContainer.clientWidth || 600;
@@ -238,11 +251,16 @@ async function renderD3GenealogyGraph() {
 
         const g = svg.append("g");
 
+        const Y_SEPARATION_FACTOR = 160;
         const simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.relation === 'marriage' ? 70 : 150).strength(0.3))
-            .force("charge", d3.forceManyBody().strength(-400))
-            .force("center", d3.forceCenter(width / 2, height / 2))
-            .force("collide", d3.forceCollide().radius(d => (d.type === 'king' ? 45 : (d.type === 'queen' ? 35 : 25)) + 5));
+            .force("link", d3.forceLink(links)
+                              .id(d => d.id)
+                              .distance(d => d.relation === 'marriage' ? 80 : 100)
+                              .strength(d => d.relation === 'marriage' ? 0.1 : 0.4))
+            .force("charge", d3.forceManyBody().strength(-350))
+            .force("center", d3.forceCenter(width / 2, height / 2).strength(0.05))
+            .force("collide", d3.forceCollide().radius(d => (d.type === 'king' ? 45 : (d.type === 'queen' ? 35 : 25)) + 10))
+            .force("yPos", d3.forceY().y(d => d.rank * Y_SEPARATION_FACTOR).strength(0.3));
 
 
         const link = g.append("g")
@@ -279,7 +297,7 @@ async function renderD3GenealogyGraph() {
             .on("end", function(event, d) {
                 if (!event.active) simulation.alphaTarget(0);
                 d.fx = null;
-                d.fy = null;
+                d.fy = null; // Allow Y force to reposition after drag
             });
 
         nodeGroup.call(drag);
@@ -336,9 +354,8 @@ function displayQuizSummary(log) {
         console.error('Quiz summary container not found.');
         return;
     }
-    summaryContainer.innerHTML = ''; // Clear any previous content
+    summaryContainer.innerHTML = '';
 
-    // --- 1. Display All Wives' Information (Reconstruction from quizData) ---
     const wivesHeader = document.createElement('h3');
     wivesHeader.className = 'mt-4 mb-3 text-center';
     wivesHeader.textContent = "The Six Wives: A Recap";
@@ -349,7 +366,6 @@ function displayQuizSummary(log) {
     allWivesArticlesContainer.classList.add('row');
     summaryContainer.appendChild(allWivesArticlesContainer);
 
-    // Use global quizData which should be populated.
     if (quizData && quizData.length > 0) {
         quizData.forEach(wifeDataEntry => {
             const wifeCardCol = document.createElement('div');
@@ -363,14 +379,11 @@ function displayQuizSummary(log) {
 
             const wifeNameHeader = document.createElement('h5');
             wifeNameHeader.className = 'card-title';
-            // Attempt to create a more readable name from wifeId if actual name isn't in quizData
             let displayName = wifeDataEntry.name || wifeDataEntry.wifeId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
             wifeNameHeader.textContent = displayName;
 
             const wifeBio = document.createElement('p');
             wifeBio.className = 'card-text small';
-            // Placeholder as quiz_data.json doesn't have full bio/fate.
-            // In a real scenario, this data would come from a richer data source.
             wifeBio.textContent = wifeDataEntry.bio || `Details for ${displayName} would appear here. The original detailed article content is not directly available in quizData for this summary view.`;
 
             const wifeFate = document.createElement('p');
@@ -388,8 +401,6 @@ function displayQuizSummary(log) {
         allWivesArticlesContainer.innerHTML = '<p class="text-center">Wife information could not be loaded for the recap.</p>';
     }
 
-
-    // --- 2. Display Question/Answer Log ---
     const logHeader = document.createElement('h3');
     logHeader.className = 'mt-5 mb-3 text-center';
     logHeader.textContent = "Your Quiz Performance";
