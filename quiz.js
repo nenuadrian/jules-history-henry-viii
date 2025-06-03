@@ -3,7 +3,7 @@
 const quizTransitionDuration = 300; // milliseconds
 let quizData = [];
 let currentWifeIndex = 0;
-let userQuizLog = []; // Initialize log for user's answers
+// let userQuizLog = []; // Ensuring this is fully removed
 
 function displayQuiz() {
     const quizQuestionElement = document.getElementById('quiz-question');
@@ -123,13 +123,7 @@ function handleAnswer(selectedOptionText) {
 
     const isCorrect = selectedOptionText === currentWifeData.correctAnswer;
 
-    userQuizLog.push({
-        question: currentWifeData.question,
-        userAnswer: selectedOptionText,
-        correctAnswer: currentWifeData.correctAnswer,
-        isCorrect: isCorrect,
-        wifeId: currentWifeData.wifeId
-    });
+    // userQuizLog.push({...}); // Block removed
 
     if (isCorrect) {
         quizFeedbackElement.textContent = "Correct!";
@@ -181,13 +175,12 @@ function loadNextQuestion() {
 
         setTimeout(() => {
             if (quizContainer) {
-                quizContainer.innerHTML = '<h2>Quiz Complete! View the Tudor Family Tree & Summary:</h2>' +
-                                          '<div id="genealogy-graph-container"><div id="genealogy-graph"></div></div>' +
-                                          '<div id="quiz-summary-container"></div>';
+                quizContainer.innerHTML = '<h2>Quiz Complete! View the Tudor Family Tree:</h2>' + // "& Summary" removed
+                                          '<div id="genealogy-graph-container"><div id="genealogy-graph"></div></div>'; // summary container div removed
 
                 renderD3GenealogyGraph();
 
-                displayQuizSummary(userQuizLog);
+                // displayQuizSummary(userQuizLog); // This line was already correctly removed/commented in the previous effective state
             }
             document.querySelectorAll('.wife-article').forEach(article => {
                 article.style.display = 'none';
@@ -386,124 +379,35 @@ async function renderD3GenealogyGraph() {
     }
 }
 
-function displayQuizSummary(log) {
-    const summaryContainer = document.getElementById('quiz-summary-container');
-    if (!summaryContainer) {
-        console.error('Quiz summary container not found.');
-        return;
-    }
-    summaryContainer.innerHTML = '';
-
-    const wivesHeader = document.createElement('h3');
-    wivesHeader.className = 'mt-4 mb-3 text-center';
-    wivesHeader.textContent = "The Six Wives: A Recap";
-    summaryContainer.appendChild(wivesHeader);
-
-    const allWivesArticlesContainer = document.createElement('div');
-    allWivesArticlesContainer.id = 'all-wives-recap';
-    allWivesArticlesContainer.classList.add('row');
-    summaryContainer.appendChild(allWivesArticlesContainer);
-
-    if (quizData && quizData.length > 0) {
-        quizData.forEach(wifeDataEntry => {
-            const wifeCardCol = document.createElement('div');
-            wifeCardCol.className = 'col-md-6 col-lg-4 mb-4';
-
-            const wifeCard = document.createElement('div');
-            wifeCard.className = 'card h-100';
-
-            const wifeCardBody = document.createElement('div');
-            wifeCardBody.className = 'card-body';
-
-            const wifeNameHeader = document.createElement('h5');
-            wifeNameHeader.className = 'card-title';
-            let displayName = wifeDataEntry.name || wifeDataEntry.wifeId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-            wifeNameHeader.textContent = displayName;
-
-            const wifeBio = document.createElement('p');
-            wifeBio.className = 'card-text small';
-            wifeBio.textContent = wifeDataEntry.bio || `Details for ${displayName} would appear here. The original detailed article content is not directly available in quizData for this summary view.`;
-
-            const wifeFate = document.createElement('p');
-            wifeFate.className = 'card-text small fw-bold';
-            wifeFate.textContent = `Fate: ${wifeDataEntry.fate || "Specific fate details not available in current quiz data."}`;
-
-            wifeCardBody.appendChild(wifeNameHeader);
-            wifeCardBody.appendChild(wifeBio);
-            wifeCardBody.appendChild(wifeFate);
-            wifeCard.appendChild(wifeCardBody);
-            wifeCardCol.appendChild(wifeCard);
-            allWivesArticlesContainer.appendChild(wifeCardCol);
-        });
-    } else {
-        allWivesArticlesContainer.innerHTML = '<p class="text-center">Wife information could not be loaded for the recap.</p>';
-    }
-
-    const logHeader = document.createElement('h3');
-    logHeader.className = 'mt-5 mb-3 text-center';
-    logHeader.textContent = "Your Quiz Performance";
-    summaryContainer.appendChild(logHeader);
-
-    const logList = document.createElement('ul');
-    logList.className = 'list-group';
-    summaryContainer.appendChild(logList);
-
-    if (log && log.length > 0) {
-        log.forEach(entry => {
-            const listItem = document.createElement('li');
-            listItem.className = 'list-group-item';
-
-            let content = `
-                <p class="mb-1"><strong>Question:</strong> ${entry.question}</p>
-                <p class="mb-1">Your answer: <span class="fw-bold">${entry.userAnswer}</span></p>
-            `;
-            if (entry.isCorrect) {
-                content += `<p class="mb-0 text-success"><strong>Correct!</strong></p>`;
-                listItem.classList.add('list-group-item-success');
-            } else {
-                content += `<p class="mb-0 text-danger"><strong>Incorrect.</strong> Correct answer: <span class="fw-bold">${entry.correctAnswer}</span></p>`;
-                listItem.classList.add('list-group-item-danger');
-            }
-            listItem.innerHTML = content;
-            logList.appendChild(listItem);
-        });
-    } else {
-        const noLogItem = document.createElement('li');
-        noLogItem.className = 'list-group-item';
-        noLogItem.textContent = 'No quiz history was recorded.';
-        logList.appendChild(noLogItem);
-    }
-}
-
+// displayQuizSummary function was here - ensuring it's removed
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Register Cytoscape extensions like Dagre -- REMOVED as Cytoscape is removed
+    // Check if we are on a page that requires quiz initialization
+    if (document.getElementById('quiz-question')) {
+        fetch('quiz_data.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                quizData = data;
+                displayQuiz();
+            })
+            .catch(error => {
+                console.error('Error loading quiz data:', error);
+                const quizContainer = document.getElementById('quiz-container');
+                if (quizContainer) {
+                    quizContainer.innerHTML = '<p style="color:red; text-align:center;">Failed to load quiz questions. Please try refreshing the page.</p>';
+                }
+            });
 
-    fetch('quiz_data.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            quizData = data;
-            displayQuiz();
-        })
-        .catch(error => {
-            console.error('Error loading quiz data:', error);
-            const quizContainer = document.getElementById('quiz-container');
-            if (quizContainer) {
-                quizContainer.innerHTML = '<p style="color:red; text-align:center;">Failed to load quiz questions. Please try refreshing the page.</p>';
-            }
-        });
-
-    const nextQuestionButton = document.getElementById('next-question-btn');
-    if (nextQuestionButton) {
-        nextQuestionButton.addEventListener('click', loadNextQuestion);
-    } else {
-        console.error("#next-question-btn not found on DOMContentLoaded.");
+        const nextQuestionButton = document.getElementById('next-question-btn');
+        if (nextQuestionButton) {
+            nextQuestionButton.addEventListener('click', loadNextQuestion);
+        } else {
+            console.error("#next-question-btn not found on DOMContentLoaded.");
+        }
     }
 });
-
-[end of quiz.js]
